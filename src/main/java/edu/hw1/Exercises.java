@@ -1,23 +1,26 @@
 package edu.hw1;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
-import java.util.Map;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 public class Exercises {
     private static int counter = 0;
 
     private final static Logger LOGGER = LogManager.getLogger();
 
+    private Exercises() {
+    }
+
     public static void helloWorld() {
         LOGGER.info("Привет, мир");
     }
 
     ///////////////////////////////////////////////[1]/////////////////////////////////////////////////////////
+    @SuppressWarnings("MagicNumber")
+    private static int secondsInMinute = 60;
 
     public static long minutesToSeconds(String value) {
         String[] minsAndSecs = value.split(":");
@@ -26,28 +29,35 @@ public class Exercises {
         }
         long mins = Long.parseLong(minsAndSecs[0]);
         long secs = Long.parseLong(minsAndSecs[1]);
-        if (secs > 59) {
+        if (secs >= secondsInMinute) {
             return -1;
         }
-        return mins * 60 + secs;
+        return mins * secondsInMinute + secs;
     }
 
     //////////////////////////////////////////////////[2]////////////////////////////////////////////////////////
+    @SuppressWarnings("MagicNumber")
+    private static int ten = 10;
 
     public static int countDigits(int value) {
+        int temp = value;
         int count = 1;
-        if (value < 0) {
-            value *= -1;
+        if (temp < 0) {
+            temp *= -1;
         }
-        while (value > 9) {
-            value /= 10;
+        while (temp >= ten) {
+            temp /= ten;
             count++;
         }
         return count;
     }
+
     /////////////////////////////////////////////////////[3]/////////////////////////////////////////////////////
 
-    public static boolean isNestable(int[] a1, int[] a2) {
+    public static boolean isNestable(int[] a1, int[] a2) throws NullPointerException {
+        if (a1 == null || a2 == null) {
+            throw new NullPointerException();
+        }
         int min1 = Integer.MAX_VALUE;
         int max1 = Integer.MIN_VALUE;
 
@@ -78,48 +88,60 @@ public class Exercises {
     }
 
     /////////////////////////////////////////////////[5]//////////////////////////////////////////////////////////////
+    @SuppressWarnings("MagicNumber")
+    private static int hundred = 100;
 
     public static boolean isPalindromeDescendant(long value) {
-        /////
-        //if(String.valueOf(value).length() % 2 != 0) return false;
-        while (value > 9) {
-            long reversed = reverseNum(value);
-            boolean isZeroAtEnd = value % 10 == 0;
-            if (!isZeroAtEnd && reversed == value) {
+        long number = value;
+        while (number >= ten) {
+            long reversed = reverseNum(number);
+            boolean isZeroAtEnd = number % ten == 0;
+            if (!isZeroAtEnd && reversed == number) {
                 return true;
             }
             long descendant = 0;
             while (reversed > 0) {
-                long a = reversed % 10;
-                reversed /= 10;
-                long b = reversed % 10;
-                reversed /= 10;
-                if (a + b > 9) {
-                    descendant = descendant * 100 + (a + b);
+                long a = reversed % ten;
+                reversed /= ten;
+                long b = reversed % ten;
+                reversed /= ten;
+                if (a + b >= ten) {
+                    descendant = descendant * hundred + (a + b);
                 } else {
-                    descendant = descendant * 10 + (a + b);
+                    descendant = descendant * ten + (a + b);
                 }
             }
-            value = descendant;
+            number = descendant;
         }
         return false;
     }
 
+    @SuppressWarnings("ParameterAssignment")
+
     private static long reverseNum(long num) {
         long reversed = 0;
         while (num > 0) {
-            reversed = reversed * 10 + num % 10;
-            num /= 10;
+            reversed = reversed * ten + num % ten;
+            num /= ten;
         }
         return reversed;
     }
 
     ////////////////////////////////////////////////[6]/////////////////////////////////////////////////////////////////
+    @SuppressWarnings("MagicNumber")
+    private static int constCaprekara = 6174;
+    @SuppressWarnings("MagicNumber")
+    private static int upperBound = 10000;
+    @SuppressWarnings("MagicNumber")
+    private static int lowerBound = 1000;
+    @SuppressWarnings("MagicNumber")
+    private static int caprekaraLength = 4;
+
     public static int countK(int value) {
-        if (value > 9999 || value < 1001) {
+        if (value >= upperBound || value <= lowerBound) {
             return -1;
         }
-        if (value == 6174) {
+        if (value == constCaprekara) {
             int temp = counter;
             counter = 0;
             return temp;
@@ -130,19 +152,20 @@ public class Exercises {
         return countK(desc - asc);
     }
 
+    @SuppressWarnings("ParameterAssignment")
     private static int sortNum(int value, boolean isASC) {
         List<Integer> list = new ArrayList<>();
         int res = 0;
-        for (int i = 0; i < 4; i++) {
-            list.add(value % 10);
-            value /= 10;
+        for (int i = 0; i < caprekaraLength; i++) {
+            list.add(value % ten);
+            value /= ten;
         }
         Collections.sort(list);
         if (!isASC) {
             Collections.reverse(list);
         }
         for (Integer digit : list) {
-            res = res * 10 + digit;
+            res = res * ten + digit;
         }
         return res;
     }
@@ -150,32 +173,39 @@ public class Exercises {
     ////////////////////////////////////////////[7]//////////////////////////////////////////////////////////////////
 
     public static int rotateLeft(int n, int shift) {
+        int shiftCounter = shift;
         StringBuilder builder = new StringBuilder(Integer.toBinaryString(n));
-        if (builder.length() < shift) {
-            shift %= builder.length();
+        if (builder.length() < shiftCounter) {
+            shiftCounter %= builder.length();
         }
-        while (shift > 0) {
+        while (shiftCounter > 0) {
             builder.append(builder.charAt(0)).deleteCharAt(0);
-            shift--;
+            shiftCounter--;
         }
         return Integer.parseInt(builder.toString(), 2);
     }
 
     public static int rotateRight(int n, int shift) {
+        int shiftCounter = shift;
         StringBuilder builder = new StringBuilder(Integer.toBinaryString(n));
-        if (builder.length() < shift) {
-            shift %= builder.length();
+        if (builder.length() < shiftCounter) {
+            shiftCounter %= builder.length();
         }
-        while (shift > 0) {
+        while (shiftCounter > 0) {
             builder.insert(0, builder.charAt(builder.length() - 1)).deleteCharAt(builder.length() - 1);
-            shift--;
+            shiftCounter--;
         }
         return Integer.parseInt(builder.toString(), 2);
     }
 
-    //////////////////////////////////////////////////[8]/////////////////////////////////////////////////////////////////////
+    //////////////////////////////////////////////////[8]//////////////////////////////////////////////
+    @SuppressWarnings("MagicNumber")
+    private static int boardSize = 8;
 
-    public static boolean knightBoardCapture(int[][] chessBoard) {
+    public static boolean knightBoardCapture(int[][] chessBoard) throws AssertionError {
+        if (chessBoard == null || chessBoard.length != boardSize || chessBoard[0].length != boardSize) {
+            throw new AssertionError();
+        }
         for (int y = 0; y < chessBoard.length; y++) {
             for (int x = 0; x < chessBoard[y].length; x++) {
                 if (chessBoard[y][x] == 1) {
