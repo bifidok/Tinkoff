@@ -45,7 +45,8 @@ public class Ex3Test {
             Exercises.isNestable(a1, a2);
         });
 
-        assertThat(thrown).isInstanceOf(NullPointerException.class);
+        assertThat(thrown).isInstanceOf(IllegalArgumentException.class)
+            .hasMessage("Input array cannot be null");
     }
 
 }

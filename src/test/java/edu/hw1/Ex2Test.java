@@ -34,4 +34,26 @@ public class Ex2Test {
             assertThat(output).isEqualTo(count);
         }
     }
+
+    @Test
+    @DisplayName("Максимальное число")
+    public void countDigits_shouldReturnCount_whenIntegerIsMax() {
+        int input = Integer.MAX_VALUE;
+        int count = String.valueOf(input).length();
+
+        int output = Exercises.countDigits(input);
+
+        assertThat(output).isEqualTo(count);
+    }
+
+    @Test
+    @DisplayName("Минимальное число")
+    public void countDigits_shouldReturnCount_whenIntegerIsMin() {
+        int input = Integer.MIN_VALUE;
+        int count = String.valueOf(input).length() - 1;
+
+        int output = Exercises.countDigits(input);
+
+        assertThat(output).isEqualTo(count);
+    }
 }

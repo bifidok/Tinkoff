@@ -26,6 +26,7 @@ public class Ex7Test {
 
         assertThat(output).isEqualTo(ans);
     }
+
     @Test
     @DisplayName("Все 32 бита(влево)")
     public void rotateLeft_shouldRotateSameAsInput_whenShiftOverBitCount() {
@@ -58,6 +59,7 @@ public class Ex7Test {
 
         assertThat(output).isEqualTo(ans);
     }
+
     @Test
     @DisplayName("Все 32 бита(вправо)")
     public void rotateRight_shouldRotateSameAsInput_whenShiftOverBitCount() {

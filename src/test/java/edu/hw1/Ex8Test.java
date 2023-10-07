@@ -24,6 +24,7 @@ public class Ex8Test {
 
         assertThat(output).isTrue();
     }
+
     @Test
     @DisplayName("Кони могут нападать")
     public void knightBoardCapture_shouldReturnFalse_whenKnightsCanAttack() {
@@ -42,17 +43,42 @@ public class Ex8Test {
 
         assertThat(output).isFalse();
     }
+
     @Test
-    @DisplayName("Пустой массив")
-    public void knightBoardCapture_shouldThrowException_whenEmptyArray() {
-        int[][] input = new int[][]{};
+    @DisplayName("Неправильная длина подмассивов")
+    public void knightBoardCapture_shouldThrowException_whenIncorrectArrayLength() {
+        int[][] input = new int[][] {
+            {0, 0, 0, 1, 0, 0, 0, 0},
+            {0, 0, 0, 0, 0, 1, 0, 0},
+            {0, 1, 0, 0, 0, 1, 0, 0, 1},
+            {0, 0, 0, 0, 1, 0, 1, 0},
+            {0, 1, 0, 0, 0, 1, 0, 0},
+            {0, 0, 0, 0, 0, 0, 0, 0},
+            {0, 1, 0, 0, 0, 0, 0},
+            {0, 0, 0, 0, 1, 0, 0, 0}
+        };
 
         Throwable thrown = catchThrowable(() -> {
             Exercises.knightBoardCapture(input);
         });
 
-        assertThat(thrown).isInstanceOf(AssertionError.class);
+        assertThat(thrown).isInstanceOf(IllegalArgumentException.class)
+            .hasMessage("Input array has incorrect length or null");
     }
+
+    @Test
+    @DisplayName("Пустой массив")
+    public void knightBoardCapture_shouldThrowException_whenEmptyArray() {
+        int[][] input = new int[][] {};
+
+        Throwable thrown = catchThrowable(() -> {
+            Exercises.knightBoardCapture(input);
+        });
+
+        assertThat(thrown).isInstanceOf(IllegalArgumentException.class)
+            .hasMessage("Input array has incorrect length or null");
+    }
+
     @Test
     @DisplayName("Несозданный массив")
     public void knightBoardCapture_shouldThrowException_whenArrayNull() {
@@ -62,6 +88,8 @@ public class Ex8Test {
             Exercises.knightBoardCapture(input);
         });
 
-        assertThat(thrown).isInstanceOf(AssertionError.class);
+        assertThat(thrown).isInstanceOf(IllegalArgumentException.class)
+            .hasMessage("Input array has incorrect length or null");
+        ;
     }
 }

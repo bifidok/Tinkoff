@@ -22,7 +22,7 @@ public class Ex6Test {
 
         int output = Exercises.countK(input);
 
-        assertThat(output).isEqualTo(1);
+        assertThat(output).isEqualTo(0);
     }
 
     @Test
