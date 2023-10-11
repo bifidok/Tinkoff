@@ -10,6 +10,7 @@ public final class Main {
     }
 
     public static void main(String[] args) {
-
+        ConsoleHangman game = new ConsoleHangman(5);
+        game.run();
     }
 }
