@@ -1,40 +1,42 @@
 package edu.project1;
 
-import java.util.Scanner;
-
 public class ConsoleHangman {
-    private InputOutputSystem inputOutputSystem;
-    private GameSession session;
-    private final static String restart = "rr";
-    private final static String end = "end";
+    private final static int WORD_LENGTH_LOWER_BOUND = 5;
+    private final static int WORD_LENGTH_UPPER_BOUND = 18;
+    private final InputOutputSystem inputOutputSystem;
+    private final GameSession session;
+    private final InputValidator validator;
 
     public ConsoleHangman(int maxAttempts) {
         session = new GameSession(maxAttempts);
         inputOutputSystem = new InputOutputSystem();
+        validator = new InputValidator();
     }
 
     public void run() {
         Message message = session.startNewSession();
+        if(message.getMaskedWord().length() < WORD_LENGTH_LOWER_BOUND
+        || message.getMaskedWord().length() > WORD_LENGTH_UPPER_BOUND){
+            return;
+        }
         while (session.checkGameState() == GameState.RUN) {
-            inputOutputSystem.output("The word: " + message.getMaskedWord());
-            inputOutputSystem.output("You have " + message.getCurAttempts() + " of "
-                + message.getMaxAttempts() + " attempts");
-            inputOutputSystem.output("Guess a letter: ");
+            inputOutputSystem.printGameState(message);
             String input = inputOutputSystem.input();
-            if (input.length() != 1) {
-                switch (input) {
-                    case restart:
-                        System.out.println("\n\n\n\n");
-                        session.startNewSession();
-                        continue;
-                    case end:
-                        return;
-                    default:
-                        continue;
+
+            InputState inputState = validator.validate(input);
+            switch (inputState) {
+                case END -> {
+                    return;
+                }
+                case RESTART -> {
+                    inputOutputSystem.clearConsole();
+                    session.startNewSession();
+                }
+                default -> {
+                    message = session.guess(input.charAt(0));
+                    inputOutputSystem.printGuessResult(message);
                 }
             }
-            message = session.guess(input.charAt(0));
-            inputOutputSystem.output(message.getGuessResult());
         }
     }
 

@@ -1,18 +1,13 @@
 package edu.project1;
 
-import java.util.Arrays;
-
 public class GameSession {
     private GameState gameState;
     private int maxAttempts;
-    private char[] attemptsInput;
     private int curAttempts;
-    private String maskedWord;
     private Message message;
     private Dictionary dictionary;
     private static final String HIT = "Hit!";
     private static final String MISS = "Missed";
-    private static final String INVALID = "Your input invalid";
     private static final String WIN = "You won!";
     private static final String LOSE = "You lose!";
 
@@ -20,8 +15,7 @@ public class GameSession {
         this.maxAttempts = maxAttempts;
         curAttempts = maxAttempts;
         message = new Message("", "", curAttempts, maxAttempts);
-        attemptsInput = new char[maxAttempts];
-        dictionary = new Dictionary();
+        dictionary = new WordHandler();
     }
 
     public Message startNewSession() {
@@ -31,12 +25,11 @@ public class GameSession {
         return message;
     }
 
+    public GameState checkGameState() {
+        return gameState;
+    }
+
     public Message guess(char guess) {
-        // повторный ввод буквы
-        if (!Character.isLetter(guess)) {
-            message.setGuessResult(INVALID);
-            return message;
-        }
         boolean containsLetter = dictionary.containsLetter(guess);
         if (containsLetter) {
             message.setGuessResult(HIT);
@@ -60,21 +53,9 @@ public class GameSession {
 
     private void resetAll() {
         curAttempts = maxAttempts;
-        Arrays.fill(attemptsInput, '*');
         message.setCurAttempts(maxAttempts);
         message.setMaskedWord(dictionary.getMaskedWord());
     }
-
-    public GameState checkGameState() {
-        return gameState;
-    }
-
-    public String getMaskedWord() {
-        return maskedWord;
-    }
 }
 
-enum GameState {
-    RUN,
-    STOP
-}
+

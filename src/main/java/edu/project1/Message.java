@@ -17,28 +17,24 @@ public class Message {
         return guessResult;
     }
 
-    public int getCurAttempts() {
-        return curAttempts;
-    }
-
-    public int getMaxAttempts() {
-        return maxAttempts;
-    }
-
     public void setGuessResult(String guessResult) {
         this.guessResult = guessResult;
     }
 
-    public String getMaskedWord() {
-        return maskedWord;
+    public int getCurAttempts() {
+        return curAttempts;
     }
 
     public void setCurAttempts(int curAttempts) {
         this.curAttempts = curAttempts;
     }
 
-    public void setMaxAttempts(int maxAttempts) {
-        this.maxAttempts = maxAttempts;
+    public int getMaxAttempts() {
+        return maxAttempts;
+    }
+
+    public String getMaskedWord() {
+        return maskedWord;
     }
 
     public void setMaskedWord(String maskedWord) {
