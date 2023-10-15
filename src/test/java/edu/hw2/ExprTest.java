@@ -19,6 +19,7 @@ public class ExprTest {
 
         assertThat(res.evaluate()).isEqualTo(37.0);
     }
+
     @Test
     @DisplayName("Отрицательное число в Negate")
     void expr_shouldEvaluateMinusOne_whenValueAlreadyNagative() {
@@ -26,10 +27,11 @@ public class ExprTest {
 
         assertThat(negOne.evaluate()).isEqualTo(1);
     }
+
     @Test
     @DisplayName("Отрицательные числа в Exponent")
     void expr_shouldExponentCorrectly_whenValueAndExponentNegative() {
-        var negOne = new Expr.Exponent(new Expr.Constant(-2),-5);
+        var negOne = new Expr.Exponent(new Expr.Constant(-2), -5);
 
         assertThat(negOne.evaluate()).isEqualTo(-0.03125);
     }

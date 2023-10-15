@@ -2,10 +2,13 @@ package edu.hw2.Task3;
 
 import edu.hw2.Task3.Connection.Connection;
 import edu.hw2.Task3.ConnectionManager.ConnectionManager;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 public final class PopularCommandExecutor {
     private final ConnectionManager manager;
     private final int maxAttemps;
+    private final static Logger LOGGER = LogManager.getLogger();
 
     public PopularCommandExecutor(ConnectionManager manager, int maxAttemps) {
         this.manager = manager;
@@ -24,14 +27,14 @@ public final class PopularCommandExecutor {
                 connection.execute(command);
             } catch (ConnectionException e) {
                 if (attemps == maxAttemps - 1) {
-                    System.out.println(e.getMessage());
+                    LOGGER.info(e.getMessage());
                 }
                 attemps++;
             } finally {
                 try {
                     connection.close();
-                } catch (Exception e1) {
-                    System.out.println(connection.toString() + " didnt close!");
+                } catch (Exception closeException) {
+                    LOGGER.info(connection.toString() + " didnt close!");
                 }
             }
         }
