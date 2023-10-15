@@ -1,8 +1,8 @@
-package edu.hw2.Task3.ConnectionManager;
+package edu.hw2.task3.connectionmanager;
 
-import edu.hw2.Task3.Connection.Connection;
-import edu.hw2.Task3.Connection.FaultyConnection;
-import edu.hw2.Task3.Connection.StableConnection;
+import edu.hw2.task3.connection.Connection;
+import edu.hw2.task3.connection.FaultyConnection;
+import edu.hw2.task3.connection.StableConnection;
 
 public class DefaultConnectionManager implements ConnectionManager {
     @Override

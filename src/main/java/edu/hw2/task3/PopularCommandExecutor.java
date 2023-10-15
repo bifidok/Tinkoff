@@ -1,7 +1,7 @@
-package edu.hw2.Task3;
+package edu.hw2.task3;
 
-import edu.hw2.Task3.Connection.Connection;
-import edu.hw2.Task3.ConnectionManager.ConnectionManager;
+import edu.hw2.task3.connection.Connection;
+import edu.hw2.task3.connectionmanager.ConnectionManager;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -25,6 +25,7 @@ public final class PopularCommandExecutor {
             Connection connection = manager.getConnection();
             try {
                 connection.execute(command);
+                attemps = maxAttemps;
             } catch (ConnectionException e) {
                 if (attemps == maxAttemps - 1) {
                     LOGGER.info(e.getMessage());

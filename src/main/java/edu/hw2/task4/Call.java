@@ -1,4 +1,4 @@
-package edu.hw2.Task4;
+package edu.hw2.task4;
 
 public class Call {
     private Call() {

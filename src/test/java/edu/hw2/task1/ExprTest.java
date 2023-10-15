@@ -1,6 +1,5 @@
-package edu.hw2;
+package edu.hw2.task1;
 
-import edu.hw2.Task1.Expr;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
@@ -22,7 +21,7 @@ public class ExprTest {
 
     @Test
     @DisplayName("Отрицательное число в Negate")
-    void expr_shouldEvaluateMinusOne_whenValueAlreadyNagative() {
+    void expr_shouldEvaluateMinusOne_whenValueAlreadyNegative() {
         var negOne = new Expr.Negate(new Expr.Constant(-1));
 
         assertThat(negOne.evaluate()).isEqualTo(1);

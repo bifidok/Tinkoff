@@ -1,6 +1,6 @@
-package edu.hw2.Task3.Connection;
+package edu.hw2.task3.connection;
 
-import edu.hw2.Task3.ConnectionException;
+import edu.hw2.task3.ConnectionException;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
