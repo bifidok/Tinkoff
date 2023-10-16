@@ -26,6 +26,9 @@ public class GameSession {
     }
 
     public GameState checkGameState() {
+        if (curAttempts == 0) {
+            gameState = GameState.STOP;
+        }
         return gameState;
     }
 

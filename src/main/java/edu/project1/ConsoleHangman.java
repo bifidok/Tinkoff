@@ -7,17 +7,17 @@ public class ConsoleHangman {
     private final GameSession session;
     private final InputValidator validator;
 
-    public ConsoleHangman(int maxAttempts) {
-        session = new GameSession(maxAttempts);
-        inputOutputSystem = new InputOutputSystem();
+    public ConsoleHangman(InputOutputSystem inputOutputSystem, GameSession session, int maxAttempts) { // ради тестов
+        this.session = session;
+        this.inputOutputSystem = inputOutputSystem;
         validator = new InputValidator();
     }
 
     public void run() {
         Message message = session.startNewSession();
-        if(message.getMaskedWord().length() < WORD_LENGTH_LOWER_BOUND
-        || message.getMaskedWord().length() > WORD_LENGTH_UPPER_BOUND){
-            return;
+        if (message.getMaskedWord().length() < WORD_LENGTH_LOWER_BOUND
+            || message.getMaskedWord().length() > WORD_LENGTH_UPPER_BOUND) {
+            throw new IllegalArgumentException("Word has incorrect length");
         }
         while (session.checkGameState() == GameState.RUN) {
             inputOutputSystem.printGameState(message);
@@ -32,12 +32,14 @@ public class ConsoleHangman {
                     inputOutputSystem.clearConsole();
                     session.startNewSession();
                 }
-                default -> {
+                case CHARACTER -> {
                     message = session.guess(input.charAt(0));
                     inputOutputSystem.printGuessResult(message);
+                }
+                default -> {
+
                 }
             }
         }
     }
-
 }
