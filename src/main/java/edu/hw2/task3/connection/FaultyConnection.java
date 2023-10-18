@@ -6,7 +6,7 @@ import org.apache.logging.log4j.Logger;
 
 public class FaultyConnection implements Connection {
     private final static Logger LOGGER = LogManager.getLogger();
-    private final double PROBABILITY_BOUND = 0.8;
+    private final static double PROBABILITY_BOUND = 0.8;
 
     @Override
     public void execute(String command) {
@@ -20,7 +20,8 @@ public class FaultyConnection implements Connection {
     public void close() {
         LOGGER.info("Connection closed");
     }
-    private boolean isConnectionFailed(){
+
+    private boolean isConnectionFailed() {
         return Math.random() < PROBABILITY_BOUND;
     }
 }

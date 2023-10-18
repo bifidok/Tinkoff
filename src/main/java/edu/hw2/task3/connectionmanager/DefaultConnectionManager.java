@@ -5,7 +5,8 @@ import edu.hw2.task3.connection.FaultyConnection;
 import edu.hw2.task3.connection.StableConnection;
 
 public class DefaultConnectionManager implements ConnectionManager {
-    private final double PROBABLITY_BOUND = 0.5;
+    private final static double PROBABLITY_BOUND = 0.5;
+
     @Override
     public Connection getConnection() {
         if (isFaultyConnection()) {
@@ -13,6 +14,7 @@ public class DefaultConnectionManager implements ConnectionManager {
         }
         return new StableConnection();
     }
+
     private boolean isFaultyConnection() {
         return Math.random() < PROBABLITY_BOUND;
     }
