@@ -1,9 +1,11 @@
 package edu.hw2.task3;
 
 import edu.hw2.task3.connection.Connection;
+import edu.hw2.task3.connection.FaultyConnection;
 import edu.hw2.task3.connection.StableConnection;
 import edu.hw2.task3.connectionmanager.ConnectionManager;
 import edu.hw2.task3.connectionmanager.DefaultConnectionManager;
+import edu.hw2.task3.connectionmanager.FaultyConnectionManager;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import static org.mockito.Mockito.mock;
@@ -23,6 +25,18 @@ public class PopularCommandExecutorTest {
     void updatePackages_shouldExecuteCommandAndCloseConnection() throws Exception {
         String command = "apt update && apt upgrade -y";
         Connection connection = mock(StableConnection.class);
+        when(connectionManager.getConnection()).thenReturn(connection);
+
+        executor.updatePackages();
+
+        verify(connection, times(1)).execute(command);
+        verify(connection, times(1)).close();
+    }
+    @Test
+    @DisplayName("Проверка на невыполнение команды и выброс ошибки")
+    void updatePackages_shouldNotExecuteCommandAndThrowConnectionException() throws Exception {
+        String command = "apt update && apt upgrade -y";
+        Connection connection = mock(FaultyConnection.class);
         when(connectionManager.getConnection()).thenReturn(connection);
 
         executor.updatePackages();

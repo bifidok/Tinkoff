@@ -25,17 +25,17 @@ public final class PopularCommandExecutor {
             Connection connection = manager.getConnection();
             try {
                 connection.execute(command);
-                attemps = maxAttemps;
+                return;
             } catch (ConnectionException e) {
                 if (attemps == maxAttemps - 1) {
-                    LOGGER.info(e.getMessage());
+                    throw new ConnectionException(e.getMessage(),e.getCause());
                 }
                 attemps++;
             } finally {
                 try {
                     connection.close();
                 } catch (Exception closeException) {
-                    LOGGER.info(connection.toString() + " didnt close!");
+                    LOGGER.warn(connection.toString() + " didnt close!");
                 }
             }
         }
