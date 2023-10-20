@@ -1,6 +1,5 @@
 package edu.hw3.task4;
 
-
 public class RomanConverter {
     private RomanConverter() {
     }

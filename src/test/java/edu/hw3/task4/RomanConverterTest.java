@@ -10,7 +10,7 @@ public class RomanConverterTest {
     @DisplayName("Базовый тест")
     public void converterToRoman_ShouldCorrectlyCovertToRoman() {
         int num = 112;
-        String answer = "LXII";
+        String answer = "CXII";
 
         assertThat(RomanConverter.convertToRoman(num)).isEqualTo(answer);
     }
@@ -32,6 +32,7 @@ public class RomanConverterTest {
         Throwable throwable = catchThrowable(() -> {
             RomanConverter.convertToRoman(num);
         });
+
         assertThat(throwable).isInstanceOf(IllegalArgumentException.class)
             .hasMessage("Roman number system does not have negative numbers");
     }
