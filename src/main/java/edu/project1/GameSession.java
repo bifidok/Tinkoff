@@ -9,19 +9,19 @@ public class GameSession {
     private GameState gameState;
     private int maxAttempts;
     private int curAttempts;
-    private Dictionary dictionary;
+    private WordHandler wordHandler;
 
     public GameSession(int maxAttempts) {
         this.maxAttempts = maxAttempts;
         curAttempts = maxAttempts;
-        dictionary = new WordHandler();
+        wordHandler = new WordHandler();
     }
 
     public SessionState startNewSession() {
         gameState = GameState.RUN;
         curAttempts = maxAttempts;
-        dictionary.generateNewWord();
-        String maskedWord = dictionary.getMaskedWord();
+        wordHandler.generateNewWord();
+        String maskedWord = wordHandler.getMaskedWord();
         return new SessionState("", maxAttempts, maxAttempts, maskedWord);
     }
 
@@ -33,16 +33,16 @@ public class GameSession {
     }
 
     public SessionState guess(char guess) {
-        boolean containsLetter = dictionary.containsLetter(guess);
-        String maskedWord = dictionary.getMaskedWord();
+        boolean containsLetter = wordHandler.containsLetter(guess);
+        String maskedWord = wordHandler.getMaskedWord();
         String guessResult;
         if (containsLetter) {
             guessResult = HIT;
-            if (dictionary.isAllLettersOpened()) {
+            if (wordHandler.isAllLettersOpened()) {
                 gameState = GameState.STOP;
                 guessResult = WIN;
             }
-            String newMaskedWord = dictionary.getMaskedWord();
+            String newMaskedWord = wordHandler.getMaskedWord();
             maskedWord = newMaskedWord;
         } else {
             guessResult = MISS;
