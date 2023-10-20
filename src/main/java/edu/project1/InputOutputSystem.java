@@ -7,9 +7,11 @@ import org.apache.logging.log4j.Logger;
 public class InputOutputSystem {
     private final static Logger LOGGER = LogManager.getLogger();
     private final Scanner scanner;
+    private final InputParser inputParser;
 
     public InputOutputSystem() {
         scanner = new Scanner(System.in);
+        inputParser = new InputParser();
     }
 
     public String input() {
@@ -17,14 +19,22 @@ public class InputOutputSystem {
         return input;
     }
 
-    public void printGuessResult(Message message) {
-        LOGGER.info(message.getGuessResult());
+    public InputState parseInput(String input) {
+        return inputParser.parse(input);
     }
 
-    public void printGameState(Message message) {
-        LOGGER.info("The word: " + message.getMaskedWord());
-        LOGGER.info("You have " + message.getCurAttempts() + " of "
-            + message.getMaxAttempts() + " attempts");
+    public void printMessage(String message) {
+        LOGGER.info(message);
+    }
+
+    public void printGuessResult(SessionState state) {
+        LOGGER.info(state.guessResult());
+    }
+
+    public void printGameState(SessionState state) {
+        LOGGER.info("The word: " + state.maskedWord());
+        LOGGER.info("You have " + state.curAttempts() + " of "
+            + state.maxAttempts() + " attempts");
         LOGGER.info("Guess a letter: ");
     }
 

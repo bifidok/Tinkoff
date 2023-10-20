@@ -1,10 +1,10 @@
 package edu.project1;
 
-public class InputValidator {
+public class InputParser {
     private final static String RESTART = "rr";
     private final static String END = "end";
 
-    public InputState validate(String input) {
+    public InputState parse(String input) {
         switch (input) {
             case RESTART -> {
                 return InputState.RESTART;

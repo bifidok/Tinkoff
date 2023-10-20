@@ -11,9 +11,15 @@ import java.util.Random;
 public class WordHandler implements Dictionary {
     private final static String DEFAULT_WORD = "tinkoff";
     private final static int WORDS_IN_DICTIONARY_COUNT = 5;
+
+    private final String[] words = new String[WORDS_IN_DICTIONARY_COUNT];
     private String word;
     private char[] maskedWord;
     private Map<Integer, Character> positionToLetter;
+
+    public WordHandler() {
+        saveAllWords();
+    }
 
     public void generateNewWord() {
         word = getRandomWord();
@@ -22,7 +28,7 @@ public class WordHandler implements Dictionary {
         for (int i = 0; i < word.length(); i++) {
             positionToLetter.put(i, word.charAt(i));
         }
-        setMaskedWord();
+        setInitialMaskedWord();
     }
 
     public boolean containsLetter(char letter) {
@@ -38,7 +44,7 @@ public class WordHandler implements Dictionary {
     }
 
     public String getMaskedWord() {
-        return Arrays.toString(maskedWord);
+        return new String(maskedWord);
     }
 
     private void updateMaskedWord(char letter) {
@@ -50,23 +56,23 @@ public class WordHandler implements Dictionary {
         }
     }
 
-    private String setMaskedWord() {
+    private void setInitialMaskedWord() {
         Arrays.fill(maskedWord, '*');
-        return Arrays.toString(maskedWord);
     }
 
-    private String getRandomWord() {
-        word = DEFAULT_WORD;
+    private void saveAllWords() {
         try (BufferedReader reader = new BufferedReader(new FileReader("src/main/java/edu/project1/Dictionary.txt"))) {
-            Random random = new Random();
-            int randomLine = random.nextInt(WORDS_IN_DICTIONARY_COUNT);
-            for (int i = 0; i < randomLine; i++) {
-                reader.readLine();
+            for (int i = 0; i < WORDS_IN_DICTIONARY_COUNT; i++) {
+                words[i] = reader.readLine();
             }
-            word = reader.readLine();
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
+    }
+
+    private String getRandomWord() {
+        Random random = new Random();
+        word = words[random.nextInt(0, words.length)];
         return word;
     }
 }

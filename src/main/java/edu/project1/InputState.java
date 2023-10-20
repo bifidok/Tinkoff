@@ -1,8 +1,8 @@
 package edu.project1;
 
 enum InputState {
+    END,
     CHARACTER,
     RESTART,
-    END,
     INVALID
 }

@@ -1,28 +1,28 @@
 package edu.project1;
 
 public class GameSession {
-    private GameState gameState;
-    private int maxAttempts;
-    private int curAttempts;
-    private Message message;
-    private Dictionary dictionary;
     private static final String HIT = "Hit!";
     private static final String MISS = "Missed";
     private static final String WIN = "You won!";
     private static final String LOSE = "You lose!";
 
+    private GameState gameState;
+    private int maxAttempts;
+    private int curAttempts;
+    private Dictionary dictionary;
+
     public GameSession(int maxAttempts) {
         this.maxAttempts = maxAttempts;
         curAttempts = maxAttempts;
-        message = new Message("", "", curAttempts, maxAttempts);
         dictionary = new WordHandler();
     }
 
-    public Message startNewSession() {
+    public SessionState startNewSession() {
         gameState = GameState.RUN;
+        curAttempts = maxAttempts;
         dictionary.generateNewWord();
-        resetAll();
-        return message;
+        String maskedWord = dictionary.getMaskedWord();
+        return new SessionState("", maxAttempts, maxAttempts, maskedWord);
     }
 
     public GameState checkGameState() {
@@ -32,32 +32,27 @@ public class GameSession {
         return gameState;
     }
 
-    public Message guess(char guess) {
+    public SessionState guess(char guess) {
         boolean containsLetter = dictionary.containsLetter(guess);
+        String maskedWord = dictionary.getMaskedWord();
+        String guessResult;
         if (containsLetter) {
-            message.setGuessResult(HIT);
+            guessResult = HIT;
             if (dictionary.isAllLettersOpened()) {
                 gameState = GameState.STOP;
-                message.setGuessResult(WIN);
+                guessResult = WIN;
             }
             String newMaskedWord = dictionary.getMaskedWord();
-            message.setMaskedWord(newMaskedWord);
+            maskedWord = newMaskedWord;
         } else {
-            message.setGuessResult(MISS);
+            guessResult = MISS;
             if (curAttempts == 1) {
                 gameState = GameState.STOP;
-                message.setGuessResult(LOSE);
+                guessResult = LOSE;
             }
             curAttempts--;
-            message.setCurAttempts(curAttempts);
         }
-        return message;
-    }
-
-    private void resetAll() {
-        curAttempts = maxAttempts;
-        message.setCurAttempts(maxAttempts);
-        message.setMaskedWord(dictionary.getMaskedWord());
+        return new SessionState(guessResult, curAttempts, maxAttempts, maskedWord);
     }
 }
 
