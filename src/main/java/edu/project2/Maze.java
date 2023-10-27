@@ -5,17 +5,16 @@ import java.util.Arrays;
 public class Maze {
     private final int width;
     private final int height;
-    private final Cell [][] grid;
+    private final Cell[][] grid;
+    private final Cell start;
+    private final Cell end;
 
-    public Maze(int width, int height, Cell[][] grid) {
+    public Maze(int width, int height, Cell[][] grid, Cell start, Cell end) {
         this.width = width;
         this.height = height;
         this.grid = grid;
-    }
-
-    public CellType getCellType(int x, int y){
-        if(x < 0 || y < 0 || x >= width || y >= height) return null;
-        return grid[y][x].type();
+        this.start = start;
+        this.end = end;
     }
 
     public int getWidth() {
@@ -30,5 +29,13 @@ public class Maze {
         return Arrays.stream(grid)
             .map(Cell[]::clone)
             .toArray(Cell[][]::new);
+    }
+
+    public Cell getStart() {
+        return start;
+    }
+
+    public Cell getEnd() {
+        return end;
     }
 }
