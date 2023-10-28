@@ -40,7 +40,7 @@ public class BFSSolverTest {
     @DisplayName("BFS solve prim maze")
     public void solve_shouldSolveIdealMaze_whenMazeGeneratedWithPrim() {
         MazeGenerator generator = new PrimGenerator();
-        Maze maze = generator.generate(10, 10);
+        Maze maze = generator.generate(15, 15);
         MazeSolver solver = new BreadthFirstSearchSolver();
 
         var answer = solver.solve(maze);
