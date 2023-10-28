@@ -10,11 +10,10 @@ public class HuntAndKillGenerator implements MazeGenerator {
         {0, -1},
     };
 
-
     public Maze generate(int width, int height) {
         Cell[][] grid = new Cell[height][width];
         generateBox(grid);
-        fillMaze(grid, new Cell(1,1,CellType.EMPTY));
+        fillMaze(grid, new Cell(1, 1, CellType.EMPTY));
         Cell start = generateIn(grid);
         Cell end = generateOut(grid);
         return new Maze(width, height, grid, start, end);
@@ -31,45 +30,46 @@ public class HuntAndKillGenerator implements MazeGenerator {
     }
 
     private void fillMaze(Cell[][] grid, Cell start) {
-        grid[start.y()][start.x()] = new Cell(start.x(),start.y(),CellType.EMPTY);
-        for(int i = 1; i < grid.length - 1; i++){
-            for(int j = 1; j < grid[i].length - 1; j++){
-                hunt(grid,grid[i][j]);
+        grid[start.y()][start.x()] = new Cell(start.x(), start.y(), CellType.EMPTY);
+        for (int i = 1; i < grid.length - 1; i++) {
+            for (int j = 1; j < grid[i].length - 1; j++) {
+                hunt(grid, grid[i][j]);
             }
         }
     }
-    private void hunt(Cell[][] grid, Cell curCell){
+
+    private void hunt(Cell[][] grid, Cell curCell) {
         if (!canMakePassage(grid, curCell.x(), curCell.y())) {
             return;
         }
-        int rand = new Random().nextInt(0,4);
-        int [] way = waysToGo[rand];
+        int rand = new Random().nextInt(0, waysToGo.length);
+        int[] way = waysToGo[rand];
         grid[curCell.y()][curCell.x()] = new Cell(curCell.x(), curCell.y(), CellType.EMPTY);
         Cell newCell = grid[curCell.y() + way[1]][curCell.x() + way[0]];
-        hunt(grid,newCell);
+        hunt(grid, newCell);
     }
 
     private Cell generateIn(Cell[][] grid) {
         Cell start = grid[1][1];
-        for (int i = 0; i < grid.length; i++) {
+        for (int i = 1; i < grid.length - 1; i++) {
             if (grid[i][1].type().equals(CellType.EMPTY)) {
-                start = new Cell(0, i, CellType.EMPTY);
-                grid[i][0] = start;
+                start = grid[i][0];
                 break;
             }
         }
+        grid[start.y()][start.x()] = new Cell(start.x(), start.y(), CellType.EMPTY);
         return start;
     }
 
     private Cell generateOut(Cell[][] grid) {
-        Cell end = grid[grid.length - 1][grid[0].length - 1];
-        for (int i = grid.length - 1; i >= 0; i--) {
+        Cell end = grid[grid.length - 2][grid[0].length - 1];
+        for (int i = grid.length - 2; i > 0; i--) {
             if (grid[i][grid[i].length - 2].type().equals(CellType.EMPTY)) {
-                end = new Cell(grid[i].length - 2, i, CellType.EMPTY);
-                grid[i][grid[i].length - 1] = end;
+                end = grid[i][grid[i].length - 1];
                 break;
             }
         }
+        grid[end.y()][end.x()] = new Cell(end.x(),end.y(),CellType.EMPTY);
         return end;
     }
 

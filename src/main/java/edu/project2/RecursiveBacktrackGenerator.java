@@ -45,25 +45,25 @@ public class RecursiveBacktrackGenerator implements MazeGenerator {
 
     private Cell generateIn(Cell[][] grid) {
         Cell start = grid[1][1];
-        for (int i = 0; i < grid.length; i++) {
+        for (int i = 1; i < grid.length - 1; i++) {
             if (grid[i][1].type().equals(CellType.EMPTY)) {
-                start = new Cell(0, i, CellType.EMPTY);
-                grid[i][0] = start;
+                start = grid[i][0];
                 break;
             }
         }
+        grid[start.y()][start.x()] = new Cell(start.x(), start.y(), CellType.EMPTY);
         return start;
     }
 
     private Cell generateOut(Cell[][] grid) {
-        Cell end = grid[grid.length - 1][grid[0].length - 1];
-        for (int i = grid.length - 1; i >= 0; i--) {
+        Cell end = grid[grid.length - 2][grid[0].length - 1];
+        for (int i = grid.length - 2; i > 0; i--) {
             if (grid[i][grid[i].length - 2].type().equals(CellType.EMPTY)) {
-                end = new Cell(grid[i].length - 2, i, CellType.EMPTY);
-                grid[i][grid[i].length - 1] = end;
+                end = grid[i][grid[i].length - 1];
                 break;
             }
         }
+        grid[end.y()][end.x()] = new Cell(end.x(),end.y(),CellType.EMPTY);
         return end;
     }
 

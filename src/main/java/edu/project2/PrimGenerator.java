@@ -72,30 +72,28 @@ public class PrimGenerator implements MazeGenerator {
 
     private Cell generateIn(Cell[][] grid) {
         Cell start = grid[1][1];
-        for (int i = 0; i < grid.length; i++) {
+        for (int i = 1; i < grid.length - 1; i++) {
             if (grid[i][1].type().equals(CellType.EMPTY)) {
-                start = new Cell(0, i, CellType.EMPTY);
-                grid[i][0] = start;
+                start = grid[i][0];
                 break;
             }
         }
+        grid[start.y()][start.x()] = new Cell(start.x(), start.y(), CellType.EMPTY);
         return start;
     }
 
     private Cell generateOut(Cell[][] grid) {
-        Cell end = grid[grid.length - 1][grid[0].length - 1];
-        for (int i = grid.length - 1; i >= 0; i--) {
-            if (grid[i][grid[i].length - 2].type().equals(CellType.EMPTY)) {
-                end = new Cell(grid[i].length - 2, i, CellType.EMPTY);
-                grid[i][grid[i].length - 1] = end;
-                break;
-            }
+        Cell end = grid[grid.length / 2][grid[0].length - 1];
+        int outDrillCounter = 0;
+        while (isWall(grid, end.x() - outDrillCounter, end.y())) {
+            grid[end.y()][end.x() - outDrillCounter] = new Cell(end.x() - outDrillCounter, end.y(), CellType.EMPTY);
+            outDrillCounter++;
         }
         return end;
     }
 
     private boolean isInBounds(Cell[][] grid, int x, int y) {
-        return x > 0 && y > 0 && x < grid[0].length && y < grid.length;
+        return x > 0 && y > 0 && x < grid[0].length - 1 && y < grid.length - 1;
     }
 
     private boolean isWall(Cell[][] grid, int x, int y) {
