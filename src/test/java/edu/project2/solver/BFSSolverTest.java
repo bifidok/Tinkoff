@@ -11,7 +11,7 @@ import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
 public class BFSSolverTest {
     @Test
-    @DisplayName("BFS solve recursive backtrack maze")
+    @DisplayName("BFS solve recursive backtrack mazе")
     public void solve_shouldSolveIdealMaze_whenMazeGeneratedWithRecursiveBacktracker() {
         MazeGenerator generator = new RecursiveBacktrackGenerator();
         Maze maze = generator.generate(10, 10);
