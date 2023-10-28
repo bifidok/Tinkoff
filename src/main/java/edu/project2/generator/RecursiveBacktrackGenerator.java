@@ -1,7 +1,13 @@
-package edu.project2;
+package edu.project2.generator;
+
+import edu.project2.Cell;
+import edu.project2.CellType;
+import edu.project2.Maze;
 
 public class RecursiveBacktrackGenerator implements MazeGenerator {
     private final static int STRAIGHT_PASSAGE_LIMIT = 4;
+    private final static int INCORRECT_SIDE_LENGTH_LOWER = 3;
+    private final static int INCORRECT_SIDE_LENGTH_UPPER = 100;
     private final int[][] waysToGo = new int[][] {
         {-1, 0},
         {0, 1},
@@ -12,6 +18,11 @@ public class RecursiveBacktrackGenerator implements MazeGenerator {
     private int pathGeneratingCounter;
 
     public Maze generate(int width, int height) {
+        if (width < INCORRECT_SIDE_LENGTH_LOWER || height < INCORRECT_SIDE_LENGTH_LOWER) {
+            throw new IllegalArgumentException("Maze cant be such small");
+        } else if (width > INCORRECT_SIDE_LENGTH_UPPER || height > INCORRECT_SIDE_LENGTH_UPPER) {
+            throw new IllegalArgumentException("No memory for recursion");
+        }
         Cell[][] grid = new Cell[height][width];
         generateBox(grid);
         fillMaze(grid, grid[height / 2][width / 2]);
@@ -63,7 +74,7 @@ public class RecursiveBacktrackGenerator implements MazeGenerator {
                 break;
             }
         }
-        grid[end.y()][end.x()] = new Cell(end.x(),end.y(),CellType.EMPTY);
+        grid[end.y()][end.x()] = new Cell(end.x(), end.y(), CellType.EMPTY);
         return end;
     }
 

@@ -1,8 +1,12 @@
-package edu.project2;
+package edu.project2.generator;
 
+import edu.project2.Cell;
+import edu.project2.CellType;
+import edu.project2.Maze;
 import java.util.Random;
 
 public class HuntAndKillGenerator implements MazeGenerator {
+    private final static int INCORRECT_SIDE_LENGTH = 3;
     private final int[][] waysToGo = new int[][] {
         {-1, 0},
         {0, 1},
@@ -11,6 +15,9 @@ public class HuntAndKillGenerator implements MazeGenerator {
     };
 
     public Maze generate(int width, int height) {
+        if (width < INCORRECT_SIDE_LENGTH || height < INCORRECT_SIDE_LENGTH) {
+            throw new IllegalArgumentException("Maze cant be such small");
+        }
         Cell[][] grid = new Cell[height][width];
         generateBox(grid);
         fillMaze(grid, new Cell(1, 1, CellType.EMPTY));
@@ -69,7 +76,7 @@ public class HuntAndKillGenerator implements MazeGenerator {
                 break;
             }
         }
-        grid[end.y()][end.x()] = new Cell(end.x(),end.y(),CellType.EMPTY);
+        grid[end.y()][end.x()] = new Cell(end.x(), end.y(), CellType.EMPTY);
         return end;
     }
 

@@ -3,7 +3,8 @@ package edu.project2;
 import java.util.Objects;
 
 public record Cell(int x, int y, CellType type) {
-    @Override public boolean equals(Object o) {
+    @Override
+    public boolean equals(Object o) {
         if (this == o) {
             return true;
         }

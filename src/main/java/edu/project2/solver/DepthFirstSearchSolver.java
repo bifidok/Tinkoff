@@ -1,9 +1,12 @@
-package edu.project2;
+package edu.project2.solver;
 
+import edu.project2.Cell;
+import edu.project2.CellType;
+import edu.project2.Maze;
 import java.util.HashSet;
 import java.util.Set;
 
-public class DepthFirstSearchSolver {
+public class DepthFirstSearchSolver implements MazeSolver {
     private final int[][] waysToGo = new int[][] {
         {0, 1},
         {-1, 0},
