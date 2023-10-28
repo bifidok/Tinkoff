@@ -8,6 +8,7 @@ public class RecursiveBacktrackGenerator implements MazeGenerator {
     private final static int STRAIGHT_PASSAGE_LIMIT = 4;
     private final static int INCORRECT_SIDE_LENGTH_LOWER = 3;
     private final static int INCORRECT_SIDE_LENGTH_UPPER = 100;
+
     private final int[][] waysToGo = new int[][] {
         {-1, 0},
         {0, 1},

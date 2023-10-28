@@ -9,6 +9,7 @@ import java.util.Random;
 
 public class PrimGenerator implements MazeGenerator {
     private final static int INCORRECT_SIDE_LENGTH = 3;
+
     private final int[][] waysToGo = new int[][] {
         {-1, 0},
         {0, 1},
