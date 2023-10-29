@@ -7,6 +7,7 @@ public class RomanConverter {
     private static final String[] ROMAN =
         new String[] {"M", "CM", "D", "CD", "C", "XC", "L", "XL", "X", "IX", "V", "IV", "I"};
     private static final int[] NUMS = new int[] {1000, 900, 500, 400, 100, 90, 50, 40, 10, 9, 5, 4, 1};
+    private static final String ZERO_IN_ROMAN = "Nihil";
 
     public static String convertToRoman(int num) {
         int tempNum = num;
@@ -20,6 +21,6 @@ public class RomanConverter {
                 tempNum -= NUMS[i];
             }
         }
-        return builder.length() > 0 ? builder.toString() : "Nihil";
+        return builder.length() > 0 ? builder.toString() : ZERO_IN_ROMAN;
     }
 }

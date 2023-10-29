@@ -10,24 +10,24 @@ public class BracketClusterizer {
     }
 
     public static List<String> clusterize(String brackets) {
-        Stack<Character> bracketContainer = new Stack<>();
-        List<String> ans = new ArrayList<>();
+        Stack<Character> bracketStack = new Stack<>();
+        List<String> answer = new ArrayList<>();
         int start = 0;
         for (int i = 0; i < brackets.length(); i++) {
             char bracket = brackets.charAt(i);
             if (bracket == '(') {
-                bracketContainer.push(bracket);
+                bracketStack.push(bracket);
             } else if (bracket == ')') {
-                if (bracketContainer.empty()) {
+                if (bracketStack.empty()) {
                     throw new IllegalArgumentException("Unbalanced brackets");
                 }
-                bracketContainer.pop();
+                bracketStack.pop();
             }
-            if (bracketContainer.empty()) {
-                ans.add(brackets.substring(start, i + 1));
+            if (bracketStack.empty()) {
+                answer.add(brackets.substring(start, i + 1));
                 start = i + 1;
             }
         }
-        return ans;
+        return answer;
     }
 }

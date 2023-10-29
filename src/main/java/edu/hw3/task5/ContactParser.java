@@ -5,6 +5,8 @@ import java.util.Collections;
 import java.util.List;
 
 public class ContactParser {
+    private final static String DESCENDING_SORT = "DESC";
+
     private ContactParser() {
 
     }
@@ -32,7 +34,7 @@ public class ContactParser {
             }
             return o1CompareTo.charAt(0) - o2CompareTo.charAt(0);
         });
-        if (sortType.equals("DESC")) {
+        if (sortType.equals(DESCENDING_SORT)) {
             Collections.reverse(contacts);
         }
         return contacts;

@@ -3,7 +3,7 @@ package edu.hw3.task6;
 import java.util.PriorityQueue;
 
 public class MoscowStockMarket implements StockMarket {
-    private PriorityQueue<Stock> stocks;
+    private final PriorityQueue<Stock> stocks;
 
     public MoscowStockMarket() {
         stocks = new PriorityQueue<>((o1, o2) -> o2.cost() - o1.cost());
