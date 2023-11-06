@@ -20,7 +20,7 @@ public class URLToFileConverter {
 
     public static File convert(String urlString) {
         if(urlString == null){
-            throw new IllegalArgumentException("Null file");
+            throw new IllegalArgumentException("File path is null");
         }
         ReadableByteChannel readableByteChannel = null;
         FileOutputStream fileOutputStream = null;

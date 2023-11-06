@@ -13,24 +13,24 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.time.LocalDate;
+import java.time.OffsetDateTime;
 import java.util.stream.Stream;
 
 public final class Main {
     private Main() {
     }
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws IOException {
         String [] testArgs = new String [] {
-            "https://raw.githubusercontent.com/elastic/examples/master/Common%20Data%20Formats/nginx_logs/nginx_logs",
-            "2023-08-31",
-            "2023-08-31",
+            "C:\\Users\\striz\\IdeaProjects\\project-template\\nginxLogs.txt",
+            "2015-05-17",
             "adoc"
         };
         ArgumentsContainer argumentsContainer = ArgumentsParser.parse(testArgs);
-        try (Stream<String> stream = Files.lines(argumentsContainer.file().toPath(), StandardCharsets.UTF_8)) {
-            stream.forEach(System.out::println);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        Path writeFilePath = argumentsContainer.file().toPath();
+        String firstLog = "93.180.71.3 - - [17/May/2015:08:05:32 +1000] \"GET /downloads/product_1 HTTP/1.1\" 304 0 \"-\" \"Debian APT-HTTP/1.3 (0.8.16~exp12ubuntu10.21)\"";
+        LogAnalyzer parser = new LogAnalyzer();
+        Statistic log = parser.analyze(argumentsContainer.file(),argumentsContainer.from(),argumentsContainer.to());
+        System.out.println(log);
     }
 }

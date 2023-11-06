@@ -2,14 +2,14 @@ package edu.project3;
 
 import java.io.File;
 import java.time.LocalDate;
-import java.time.OffsetDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
 import java.util.regex.Pattern;
 
 public class ArgumentsParser {
-    private final static Pattern URL_PATTERN = Pattern.compile("(http)?.*\\.com");
-    private final static String DATE_PATTERN = "yyyy-MM-dd";
+    private final static Pattern URL_PATTERN = Pattern.compile("^(http)?.*\\.com");
+    private final static Pattern DATE_PATTERN = Pattern.compile("\\d{4}-\\d{2}-\\d{2}");
+    private final static String DATE_FORMAT = "yyyy-MM-dd";
     private final static String MARKDOWN = "markdown";
     private final static String ADOC = "adoc";
 
@@ -35,17 +35,18 @@ public class ArgumentsParser {
                 }
                 continue;
             }
-            if(from == null){
-                from = parseDate(args[i]);
-                continue;
+            if (isDate(args[i])) {
+                if (from == null) {
+                    from = parseDate(args[i]);
+                    continue;
+                } else if (to == null) {
+                    to = parseDate(args[i]);
+                    continue;
+                }
             }
-            if(to == null){
-                to = parseDate(args[i]);
-                continue;
-            }
-            if(args[i].equals(MARKDOWN)){
+            if (args[i].equals(MARKDOWN)) {
                 format = OutputFormat.MARKDOWN;
-            }else if(args[i].equals(ADOC)){
+            } else if (args[i].equals(ADOC)) {
                 format = OutputFormat.ADOC;
             }
         }
@@ -61,8 +62,14 @@ public class ArgumentsParser {
         var matcher = URL_PATTERN.matcher(path);
         return matcher.find();
     }
-    private static LocalDate parseDate(String date){
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern(DATE_PATTERN);
+
+    private static boolean isDate(String date) {
+        var matcher = DATE_PATTERN.matcher(date);
+        return matcher.matches();
+    }
+
+    private static LocalDate parseDate(String date) {
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern(DATE_FORMAT);
         LocalDate parsedDate = null;
         try {
             parsedDate = LocalDate.parse(date, formatter);
