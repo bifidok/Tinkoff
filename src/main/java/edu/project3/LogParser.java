@@ -33,7 +33,8 @@ public class LogParser {
         String resource = getResource(matcher);
         String respCode = getResponseCode(matcher);
         long respSize = getResponseSize(matcher);
-        return new Log(dateTime, resource, respCode, respSize);
+        String useragent = getUseragent(matcher);
+        return new Log(dateTime, resource, respCode, respSize,useragent);
     }
 
     private OffsetDateTime getDateTime(Matcher matcher) {
@@ -53,5 +54,8 @@ public class LogParser {
     private long getResponseSize(Matcher matcher) {
         String responseSizeStr = matcher.group("responseSize");
         return Long.parseLong(responseSizeStr);
+    }
+    private String getUseragent(Matcher matcher){
+        return matcher.group("useragent");
     }
 }
