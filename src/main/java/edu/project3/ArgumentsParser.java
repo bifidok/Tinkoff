@@ -68,13 +68,14 @@ public class ArgumentsParser {
         return matcher.matches();
     }
 
+    @SuppressWarnings("RegexpSinglelineJava")
     private static LocalDate parseDate(String date) {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern(DATE_FORMAT);
         LocalDate parsedDate = null;
         try {
             parsedDate = LocalDate.parse(date, formatter);
         } catch (DateTimeParseException dateTimeParseException) {
-            dateTimeParseException.printStackTrace();
+            System.out.println("Invalid date format, use ISO8601");
         }
         return parsedDate;
     }

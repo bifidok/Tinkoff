@@ -16,28 +16,29 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 public class LogAnalyzer {
+    private final static int TABLE_RAWS = 3;
+
     private int logsCount;
     private long summaryServerResponseSize;
     private final Map<String, Integer> resourceToRequestCount;
     private final Map<String, Integer> responseCodeToCount;
     private final Map<String, Integer> useragentToCount;
     private final Map<LocalDate, Integer> dateToCount;
-    private final LogParser parser;
 
     public LogAnalyzer() {
         resourceToRequestCount = new HashMap<>();
         responseCodeToCount = new HashMap<>();
         useragentToCount = new HashMap<>();
         dateToCount = new HashMap<>();
-        parser = new LogParser();
     }
 
+    @SuppressWarnings("RegexpSinglelineJava")
     public Statistic analyze(File file, LocalDate from, LocalDate to) {
-        OffsetDateTime fromOffset = convertLocalDate(from, true);
-        OffsetDateTime toOffset = convertLocalDate(to, false);
+        OffsetDateTime fromOffset = convertToOffsetDate(from, LocalDate.EPOCH);
+        OffsetDateTime toOffset = convertToOffsetDate(to, LocalDate.now());
         try (Stream<String> stream = Files.lines(file.toPath(), StandardCharsets.UTF_8)) {
             stream
-                .map(parser::parse)
+                .map(LogParser::parse)
                 .filter(log -> log.dateTime().isAfter(fromOffset) && log.dateTime().isBefore(toOffset))
                 .forEach(log -> {
                     logsCount++;
@@ -52,22 +53,25 @@ public class LogAnalyzer {
                     );
                     useragentToCount.put(
                         log.useragent(),
-                        useragentToCount.getOrDefault(log.useragent(),0) + 1
+                        useragentToCount.getOrDefault(log.useragent(), 0) + 1
                     );
                     var logOffsetDateTime = log.dateTime();
                     var logDate = LocalDate.of(
                         logOffsetDateTime.getYear(),
                         logOffsetDateTime.getMonth(),
-                        logOffsetDateTime.getDayOfMonth());
+                        logOffsetDateTime.getDayOfMonth()
+                    );
                     dateToCount.put(
                         logDate,
-                        dateToCount.getOrDefault(logDate,0) + 1
+                        dateToCount.getOrDefault(logDate, 0) + 1
                     );
                 });
-        } catch (IOException e) {
-            e.printStackTrace();
+        } catch (IOException exception) {
+            System.out.println(exception.getMessage());
         }
-
+        if (logsCount == 0) {
+            return null;
+        }
         return new Statistic(
             file.getName(),
             logsCount,
@@ -79,19 +83,19 @@ public class LogAnalyzer {
         );
     }
 
-    private<T> List<Map.Entry<T, Integer>> sortMap(Map<T, Integer> map) {
+    private <T> List<Map.Entry<T, Integer>> sortMap(Map<T, Integer> map) {
         return map.entrySet().stream()
             .sorted((entry1, entry2) -> entry2.getValue() - entry1.getValue())
-            .limit(3)
+            .limit(TABLE_RAWS)
             .collect(Collectors.toList());
     }
 
-    private OffsetDateTime convertLocalDate(LocalDate date, boolean isFrom) {
+    private OffsetDateTime convertToOffsetDate(LocalDate date, LocalDate defaultDate) {
         if (date != null) {
             return OffsetDateTime.of(LocalDateTime.of(date, LocalTime.NOON), ZoneOffset.UTC);
         }
         return OffsetDateTime.of(
-            LocalDateTime.of(isFrom ? LocalDate.EPOCH : LocalDate.now(), LocalTime.NOON),
+            LocalDateTime.of(defaultDate, LocalTime.NOON),
             ZoneOffset.UTC
         );
     }

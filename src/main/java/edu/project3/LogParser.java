@@ -1,6 +1,5 @@
 package edu.project3;
 
-import java.time.LocalDate;
 import java.time.OffsetDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.regex.Matcher;
@@ -26,36 +25,42 @@ public class LogParser {
 
     private static final String DATE_TIME_FORMAT = "dd/MMM/yyyy:HH:mm:ss Z";
 
-    public Log parse(String log) {
+    private LogParser() {
+    }
+
+    public static Log parse(String log) {
         Matcher matcher = LOG_PATTERN.matcher(log);
-        if(!matcher.matches()) return null;
+        if (!matcher.matches()) {
+            return null;
+        }
         OffsetDateTime dateTime = getDateTime(matcher);
         String resource = getResource(matcher);
         String respCode = getResponseCode(matcher);
         long respSize = getResponseSize(matcher);
         String useragent = getUseragent(matcher);
-        return new Log(dateTime, resource, respCode, respSize,useragent);
+        return new Log(dateTime, resource, respCode, respSize, useragent);
     }
 
-    private OffsetDateTime getDateTime(Matcher matcher) {
+    private static OffsetDateTime getDateTime(Matcher matcher) {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern(DATE_TIME_FORMAT);
         OffsetDateTime dateTime = OffsetDateTime.parse(matcher.group("datetime"), formatter);
         return dateTime;
     }
 
-    private String getResource(Matcher matcher) {
+    private static String getResource(Matcher matcher) {
         return matcher.group("resource");
     }
 
-    private String getResponseCode(Matcher matcher) {
+    private static String getResponseCode(Matcher matcher) {
         return matcher.group("responseCode");
     }
 
-    private long getResponseSize(Matcher matcher) {
+    private static long getResponseSize(Matcher matcher) {
         String responseSizeStr = matcher.group("responseSize");
         return Long.parseLong(responseSizeStr);
     }
-    private String getUseragent(Matcher matcher){
+
+    private static String getUseragent(Matcher matcher) {
         return matcher.group("useragent");
     }
 }
