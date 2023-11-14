@@ -20,7 +20,6 @@ public class AbstractFilterTest {
     private static final AbstractFilter magicFilter = new MagicNumber(0x89, 'P', 'N', 'G');
     private static final AbstractFilter readableFilter = new Readable();
     private static final AbstractFilter writableFilter = new Writable();
-    private static final AbstractFilter fileNameFilter = new RegexContains("size.txt");
     private static final Path FILES_TO_FILTER_DIRECTORY =
         Path.of("C:\\Users\\striz\\IdeaProjects\\project-template\\src\\main\\resources");
 
