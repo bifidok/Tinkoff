@@ -23,7 +23,7 @@ public class HackerNewsTest {
     }
 
     @Test
-    @DisplayName("Несущиствующий id")
+    @DisplayName("Несуществующий id")
     public void news_shouldReturnEmptyString() {
         var name = HackerNews.news(Integer.MIN_VALUE);
 
