@@ -9,6 +9,8 @@ public class Task2 {
     }
 
     public static BigInteger factorial(int num){
+        if(num < 0) return null;
+        if(num == 0) return BigInteger.ONE;
         return IntStream
             .rangeClosed(1,num)
             .parallel()
