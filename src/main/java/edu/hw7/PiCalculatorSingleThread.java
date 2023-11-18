@@ -2,10 +2,11 @@ package edu.hw7;
 
 import java.security.SecureRandom;
 
-public class Task4SingleThread {
-    private final double SQUARE_SIDE_LENGTH = 1;
-    private final double CIRCLE_CENTER = SQUARE_SIDE_LENGTH / 2;
-    private final double CIRCLE_RADIUS = SQUARE_SIDE_LENGTH / 2;
+public class PiCalculatorSingleThread {
+    private final static double SQUARE_SIDE_LENGTH = 1;
+    private final static double CIRCLE_CENTER = SQUARE_SIDE_LENGTH / 2;
+    private final static double CIRCLE_RADIUS = SQUARE_SIDE_LENGTH / 2;
+    private final static int FACTOR_OF_THE_PI_FORMULA = 4;
 
     public double calculate(int pointsCount) {
         SecureRandom random = new SecureRandom();
@@ -21,7 +22,7 @@ public class Task4SingleThread {
             }
             totalCount++;
         }
-        return 4 * ((double)circleCount / (double)totalCount);
+        return FACTOR_OF_THE_PI_FORMULA * ((double) circleCount / (double) totalCount);
     }
 
     private boolean isInCircle(double x, double y) {

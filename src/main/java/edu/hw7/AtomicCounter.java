@@ -1,17 +1,16 @@
 package edu.hw7;
 
-import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
 
-public class Task1 {
-    private static AtomicInteger counter = new AtomicInteger(0);
+public class AtomicCounter {
 
-    private Task1() {
+    private AtomicCounter() {
     }
 
-    public static int increaseCounter(int threadsCount,int incrementCount) {
+    public static int increaseCounter(int threadsCount, int incrementCount) {
+        AtomicInteger counter = new AtomicInteger(0);
         List<Thread> threads = new ArrayList<>(threadsCount);
         for (int i = 0; i < threadsCount; i++) {
             Thread thread = new Thread(() -> {

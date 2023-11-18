@@ -5,14 +5,15 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
 
-public class Task4MultiThread {
-    private final double SQUARE_SIDE_LENGTH = 1;
-    private final double CIRCLE_CENTER = SQUARE_SIDE_LENGTH / 2;
-    private final double CIRCLE_RADIUS = SQUARE_SIDE_LENGTH / 2;
+public class PiCalculatorMultiThread {
+    private final static double SQUARE_SIDE_LENGTH = 1;
+    private final static double CIRCLE_CENTER = SQUARE_SIDE_LENGTH / 2;
+    private final static double CIRCLE_RADIUS = SQUARE_SIDE_LENGTH / 2;
+    private final static int FACTOR_OF_THE_PI_FORMULA = 4;
 
     private int threadsCount;
 
-    public Task4MultiThread(int threadsCount) {
+    public PiCalculatorMultiThread(int threadsCount) {
         this.threadsCount = threadsCount;
     }
 
@@ -36,17 +37,17 @@ public class Task4MultiThread {
             });
             threads.add(thread);
         }
-        for(Thread thread : threads){
+        for (Thread thread : threads) {
             thread.start();
         }
-        for(Thread thread : threads){
+        for (Thread thread : threads) {
             try {
                 thread.join();
             } catch (InterruptedException e) {
                 throw new RuntimeException(e);
             }
         }
-        return 4 * ((double)circleCount.get() / (double)totalCount.get());
+        return FACTOR_OF_THE_PI_FORMULA * ((double) circleCount.get() / (double) totalCount.get());
     }
 
     private boolean isInCircle(double x, double y) {

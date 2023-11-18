@@ -4,11 +4,11 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
-public class Task4Test {
+public class PiCalculatorTest {
     @Test
     @DisplayName("Однопоточный алгоритм")
-    public void calculate_whenSingleThread(){
-        Task4SingleThread task4SingleThread = new Task4SingleThread();
+    public void calculate_whenSingleThread() {
+        PiCalculatorSingleThread task4SingleThread = new PiCalculatorSingleThread();
         int pointsCount = 10000;
         double maxMeasurementError = 1;
 
@@ -19,8 +19,8 @@ public class Task4Test {
 
     @Test
     @DisplayName("Многопоточный алгоритм")
-    public void calculate_whenMultiThread(){
-        Task4MultiThread task4SingleThread = new Task4MultiThread(5);
+    public void calculate_whenMultiThread() {
+        PiCalculatorMultiThread task4SingleThread = new PiCalculatorMultiThread(5);
         int pointsCount = 10000;
         double maxMeasurementError = 1;
 
