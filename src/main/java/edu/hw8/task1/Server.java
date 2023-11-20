@@ -13,30 +13,29 @@ import java.util.concurrent.Future;
 
 public class Server {
     private final static Logger LOGGER = LogManager.getLogger();
-    private static ExecutorService executorService;
-    private static ServerSocket server;
 
     private final int MAX_THREADS = 10;
     private final int THREAD_POOL_COUNT;
     private final int PORT;
+    private ServerSocket server;
 
     public Server(int port, int threads) {
         THREAD_POOL_COUNT = Math.min(threads, MAX_THREADS);
         this.PORT = port;
     }
 
-    public void start() throws IOException {
-        executorService = Executors.newFixedThreadPool(THREAD_POOL_COUNT);
+    public void start() {
+        ExecutorService executorService = Executors.newFixedThreadPool(THREAD_POOL_COUNT);
         try {
             server = new ServerSocket(PORT);
             while (!server.isClosed()) {
                 Socket client = server.accept();
-                Future future = executorService.submit(new ServerThreadHandler(client));
+                executorService.execute(new ServerThreadHandler(client));
             }
         } catch (IOException exception) {
-            LOGGER.warn("Server closed with exception");
         } finally {
             executorService.shutdown();
+            LOGGER.warn("Соединение прервано");
         }
     }
 

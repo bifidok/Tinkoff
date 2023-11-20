@@ -11,18 +11,20 @@ import java.net.Socket;
 
 public class ServerThreadHandler implements Runnable {
     private final static Logger LOGGER = LogManager.getLogger();
-    private static Socket client;
-    private static BufferedReader reader;
-    private static BufferedWriter writer;
-    private static Repository quoteRepository;
+
+    private final Repository quoteRepository;
+    private final Socket client;
+    private BufferedReader reader;
+    private BufferedWriter writer;
 
     public ServerThreadHandler(Socket client) {
-        ServerThreadHandler.client = client;
+        this.client = client;
         quoteRepository = new QuoteRepository();
     }
 
     @Override
     public void run() {
+        LOGGER.info("");
         LOGGER.info("New connection opened");
         try {
             reader = new BufferedReader(new InputStreamReader(client.getInputStream()));
@@ -41,7 +43,7 @@ public class ServerThreadHandler implements Runnable {
                 writer.write(quote + '\n');
                 writer.flush();
             }
-        } catch (IOException e) {
+        } catch (IOException  e) {
             throw new RuntimeException(e);
         } finally {
             try {
