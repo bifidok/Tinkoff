@@ -2,10 +2,9 @@ package edu.hw8.task1;
 
 import java.util.List;
 
-public class QuoteRepository implements Repository{
+public class QuoteRepository implements Repository {
     private final static String DEFAULT_QUOTE = "Сам";
-
-    private final static List<String> quotes = List.of(
+    private final static List<String> QUOTES = List.of(
         "Не переходи на личности там, где их нет",
         "Если твои противники перешли на личные оскорбления, будь уверена — твоя победа не за горами",
         "А я тебе говорил, что ты глупый? Так вот, я забираю свои слова обратно... Ты просто бог идиотизма.",
@@ -14,11 +13,11 @@ public class QuoteRepository implements Repository{
 
     @Override
     public String findByKeyWord(String keyWord) {
-        if(keyWord == null) {
+        if (keyWord == null) {
             return null;
         }
-        for(String quote : quotes){
-            if(quote.contains(keyWord)){
+        for (String quote : QUOTES) {
+            if (quote.contains(keyWord)) {
                 return quote;
             }
         }

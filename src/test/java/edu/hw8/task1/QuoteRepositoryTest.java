@@ -1,4 +1,4 @@
-package edu.hw8;
+package edu.hw8.task1;
 
 import edu.hw8.task1.QuoteRepository;
 import org.junit.jupiter.api.DisplayName;

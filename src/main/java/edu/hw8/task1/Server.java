@@ -1,33 +1,30 @@
 package edu.hw8.task1;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
-import java.util.concurrent.Future;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 public class Server {
     private final static Logger LOGGER = LogManager.getLogger();
 
-    private final int MAX_THREADS = 10;
-    private final int THREAD_POOL_COUNT;
-    private final int PORT;
+    private final static int MAX_THREADS = 10;
+    private int threadPoolCount;
+    private int port;
     private ServerSocket server;
 
     public Server(int port, int threads) {
-        THREAD_POOL_COUNT = Math.min(threads, MAX_THREADS);
-        this.PORT = port;
+        threadPoolCount = Math.min(threads, MAX_THREADS);
+        this.port = port;
     }
 
     public void start() {
-        ExecutorService executorService = Executors.newFixedThreadPool(THREAD_POOL_COUNT);
+        ExecutorService executorService = Executors.newFixedThreadPool(threadPoolCount);
         try {
-            server = new ServerSocket(PORT);
+            server = new ServerSocket(port);
             while (!server.isClosed()) {
                 Socket client = server.accept();
                 executorService.execute(new ServerThreadHandler(client));

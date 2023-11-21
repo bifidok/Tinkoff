@@ -1,32 +1,35 @@
-package edu.hw8.task3;
+package edu.hw8.task3.bruteForceMultiThread;
 
+import edu.hw8.task3.PasswordGenerator;
 import java.nio.charset.StandardCharsets;
-import java.nio.file.Path;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
-import java.util.HashMap;
 import java.util.Map;
 
-public class BruteForce {
-    private final static String HASH_TYPE = "MD5";
-    private int passwordMaxLength;
-    private Map<String, String> hackedDatabase;
-    private Map<String, String> bruteForcedData;
+public class BruteTask implements Runnable {
+    private final Map<String, String> hackedDatabase;
+    private final PasswordGenerator generator;
+    private final Map<String, String> bruteForcedData;
+    private String hashType;
 
-    public BruteForce(int passwordMaxLength) {
-        this.passwordMaxLength = passwordMaxLength;
+    public BruteTask(
+        Map<String, String> hackedDatabase,
+        String hashType,
+        PasswordGenerator generator,
+        Map<String, String> bruteForcedData
+    ) {
+        this.hackedDatabase = hackedDatabase;
+        this.hashType = hashType;
+        this.generator = generator;
+        this.bruteForcedData = bruteForcedData;
     }
 
     @SuppressWarnings("MagicNumber")
-    public Map<String, String> start(Path databaseFile) {
-        DatabaseReader databaseReader = new DatabaseReader();
-        PasswordGenerator generator = new PasswordGenerator(passwordMaxLength);
-        generator.start();
-        hackedDatabase = databaseReader.read(databaseFile);
-        bruteForcedData = new HashMap<>();
+    @Override
+    public void run() {
         try {
             StringBuilder stringBuilder = new StringBuilder();
-            MessageDigest messageDigest = MessageDigest.getInstance(HASH_TYPE);
+            MessageDigest messageDigest = MessageDigest.getInstance(hashType);
             while (!hackedDatabase.isEmpty()) {
                 String generatedPassword = generator.nextPassword();
                 messageDigest.update(generatedPassword.getBytes(StandardCharsets.UTF_8));
@@ -43,6 +46,5 @@ public class BruteForce {
         } catch (NoSuchAlgorithmException e) {
             throw new RuntimeException(e);
         }
-        return bruteForcedData;
     }
 }

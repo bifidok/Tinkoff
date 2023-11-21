@@ -10,11 +10,11 @@ public class FixedThreadPool implements ThreadPool {
     private final BlockingQueue<Runnable> taskQueue;
     private final ReentrantLock mainLock = new ReentrantLock();
     private final List<Worker> workers;
-    private final int MAX_POOL_SIZE;
+    private int maxPoolSize;
     private boolean isStopped = false;
 
     private FixedThreadPool(int threadCount) {
-        MAX_POOL_SIZE = threadCount;
+        maxPoolSize = threadCount;
         taskQueue = new LinkedBlockingQueue<>();
         workers = new ArrayList<>();
     }
@@ -25,7 +25,7 @@ public class FixedThreadPool implements ThreadPool {
 
     @Override
     public void start() {
-        for (int i = 0; i < MAX_POOL_SIZE; i++) {
+        for (int i = 0; i < maxPoolSize; i++) {
             workers.add(new Worker(taskQueue));
         }
         for (Worker worker : workers) {
@@ -42,15 +42,14 @@ public class FixedThreadPool implements ThreadPool {
 
     @Override
     public void close() {
-        final ReentrantLock mainLock = this.mainLock;
         mainLock.lock();
-        try{
+        try {
             if (!isStopped) {
                 isStopped = true;
                 interruptWorkers();
 
             }
-        }finally {
+        } finally {
             mainLock.unlock();
         }
     }
