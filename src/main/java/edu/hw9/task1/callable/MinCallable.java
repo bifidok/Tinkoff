@@ -4,8 +4,9 @@ import java.util.Arrays;
 import java.util.concurrent.Callable;
 
 public class MinCallable implements Callable<Double> {
-    private double [] data;
-    public MinCallable(double [] data) {
+    private double[] data;
+
+    public MinCallable(double[] data) {
         this.data = data;
     }
 

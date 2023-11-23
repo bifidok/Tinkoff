@@ -4,8 +4,9 @@ import java.util.Arrays;
 import java.util.concurrent.Callable;
 
 public class MaxCallable implements Callable<Double> {
-    private double [] data;
-    public MaxCallable(double [] data) {
+    private double[] data;
+
+    public MaxCallable(double[] data) {
         this.data = data;
     }
 

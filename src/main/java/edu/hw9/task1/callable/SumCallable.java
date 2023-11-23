@@ -4,8 +4,9 @@ import java.util.Arrays;
 import java.util.concurrent.Callable;
 
 public class SumCallable implements Callable<Double> {
-    private double [] data;
-    public SumCallable(double [] data) {
+    private double[] data;
+
+    public SumCallable(double[] data) {
         this.data = data;
     }
 

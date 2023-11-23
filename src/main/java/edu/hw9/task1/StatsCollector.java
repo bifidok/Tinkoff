@@ -11,21 +11,24 @@ import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
-import java.util.concurrent.FutureTask;
 import java.util.concurrent.locks.ReadWriteLock;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
 
 public class StatsCollector {
-    private final ExecutorService executorService = Executors.newFixedThreadPool(4);
+    private final static int METRICS_COUNT = 4;
+    private final ExecutorService executorService;
     private final ReadWriteLock lock = new ReentrantReadWriteLock();
-
-    private final Map<String,Metric> metrics;
+    private final Map<String, Metric> metrics;
 
     public StatsCollector() {
         metrics = new HashMap<>();
+        executorService = Executors.newFixedThreadPool(METRICS_COUNT);
     }
 
-    public void push(String metricName, double [] data){
+    public void push(String metricName, double[] data) {
+        if (data == null) {
+            return;
+        }
         lock.writeLock().lock();
         try {
             Future<Double> sumFuture = executorService.submit(new SumCallable(data));
@@ -41,22 +44,23 @@ public class StatsCollector {
             } catch (InterruptedException | ExecutionException e) {
                 throw new RuntimeException(e);
             }
-        }finally {
+        } finally {
             lock.writeLock().unlock();
         }
     }
 
-    public Set<Map.Entry<String, Metric>> stats(){
+    public Set<Map.Entry<String, Metric>> stats() {
         lock.readLock().lock();
         Set<Map.Entry<String, Metric>> entries;
         try {
             entries = metrics.entrySet();
-        }finally {
+        } finally {
             lock.readLock().unlock();
         }
         return entries;
     }
-    public void close(){
+
+    public void close() {
         executorService.shutdown();
     }
 }

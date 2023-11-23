@@ -10,11 +10,11 @@ import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 public class ExtensionTask extends RecursiveTask<List<Path>> {
-    private final Path path;
+    private final Path rootPath;
     private final String extension;
 
-    public ExtensionTask(Path path,String extension) {
-        this.path = path;
+    public ExtensionTask(Path path, String extension) {
+        this.rootPath = path;
         this.extension = extension;
     }
 
@@ -23,17 +23,17 @@ public class ExtensionTask extends RecursiveTask<List<Path>> {
         Pattern pattern = Pattern.compile(".*\\." + extension + "$");
         List<Path> pathContent;
         try {
-            pathContent = Files.list(path).collect(Collectors.toList());
+            pathContent = Files.list(rootPath).collect(Collectors.toList());
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
         List<Path> files = new ArrayList<>();
         List<Path> directories = new ArrayList<>();
 
-        for(Path path : pathContent){
-            if(Files.isDirectory(path)){
+        for (Path path : pathContent) {
+            if (Files.isDirectory(path)) {
                 directories.add(path);
-            }else if(Files.isRegularFile(path)){
+            } else if (Files.isRegularFile(path)) {
                 files.add(path);
             }
         }
@@ -41,15 +41,15 @@ public class ExtensionTask extends RecursiveTask<List<Path>> {
         List<ExtensionTask> subTasks = new ArrayList<>();
 
         for (Path directory : directories) {
-            ExtensionTask task = new ExtensionTask(directory,extension);
+            ExtensionTask task = new ExtensionTask(directory, extension);
             task.fork();
             subTasks.add(task);
         }
 
         List<Path> filesWithRequiredExtension = new ArrayList<>();
-        for (var path : files){
+        for (var path : files) {
             var matcher = pattern.matcher(path.getFileName().toString());
-            if(matcher.matches()){
+            if (matcher.matches()) {
                 filesWithRequiredExtension.add(path);
             }
         }

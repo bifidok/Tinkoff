@@ -4,8 +4,9 @@ import java.util.Arrays;
 import java.util.concurrent.Callable;
 
 public class AverageCallable implements Callable<Double> {
-    private double [] data;
-    public AverageCallable(double [] data) {
+    private double[] data;
+
+    public AverageCallable(double[] data) {
         this.data = data;
     }
 
