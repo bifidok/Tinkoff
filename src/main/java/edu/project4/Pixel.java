@@ -1,3 +1,3 @@
 package edu.project4;
 
-public record Pixel(double r, double g, double b, int hitCount, double normal) { }
+public record Pixel(int r, int g, int b, int hitCount, double normal) { }
