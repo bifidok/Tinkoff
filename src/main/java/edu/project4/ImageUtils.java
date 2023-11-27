@@ -22,10 +22,11 @@ public final class ImageUtils {
         BufferedImage bufferedImage = convertFractalToBuffered(image);
         String fileFormat;
         switch (format) {
-            case ImageFormat.BMP -> fileFormat = "BMP";
-            case ImageFormat.JPEG -> fileFormat = "JPEG";
-            default -> fileFormat = "PNG";
+            case ImageFormat.BMP -> fileFormat = "bmp";
+            case ImageFormat.JPEG -> fileFormat = "jpeg";
+            default -> fileFormat = "png";
         }
+        filename = Path.of(String.format("%s.%s",filename.toString(), fileFormat));
         ImageIO.write(bufferedImage, fileFormat, filename.toFile());
     }
 

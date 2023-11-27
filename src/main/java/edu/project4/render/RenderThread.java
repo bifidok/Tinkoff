@@ -1,30 +1,47 @@
 package edu.project4.render;
 
 import edu.project4.AffineFactorContainer;
-import edu.project4.FractalImage;
 import edu.project4.Pixel;
 import edu.project4.Point;
 import edu.project4.transformation.Transformation;
-import java.util.List;
 import java.util.Random;
+import java.util.concurrent.atomic.AtomicInteger;
 
-public class SingleThreadRenderer implements Renderer {
-    private static final Random random = new Random();
+public class RenderThread implements Runnable {
+
     private static final Point POINT_MIN = new Point(-1.777, -1.0);
     private static final Point POINT_MAX = new Point(1.777, 1.0);
     private static final double RANGE_X = POINT_MAX.x() - POINT_MIN.x();
     private static final double RANGE_Y = POINT_MAX.y() - POINT_MIN.y();
+    private static final Random random = new Random();
+
+    private final FractalFlameConfiguration configuration;
+    private final AffineFactorContainer[] affineFactors;
+    private final Transformation transformation;
+    private final ConcurrentPixelTwoDimensionalArray pixels;
+    private AtomicInteger sample;
+
+    public RenderThread(
+        FractalFlameConfiguration configuration,
+        AffineFactorContainer[] factorContainers,
+        Transformation transformation,
+        ConcurrentPixelTwoDimensionalArray pixels,
+        AtomicInteger sample
+    ) {
+        this.configuration = configuration;
+        this.affineFactors = factorContainers;
+        this.transformation = transformation;
+        this.pixels = pixels;
+        this.sample = sample;
+    }
 
     @Override
-    public FractalImage render(FractalFlameConfiguration configuration, List<Transformation> variations) {
-        Transformation transformation = variations.get(random.nextInt(0, variations.size()));
+    public void run() {
         int xResolution = configuration.width();
         int yResolution = configuration.height();
-        var pixels = createInitialPixels(xResolution, yResolution);
-        var affineFactors = createFactors(5);
-
-        for (int num = 0; num < configuration.samples(); num++) {
+        for (; sample.get() < configuration.samples(); sample.incrementAndGet()) {
             Point next = randomPoint();
+
             for (int iter = -20; iter < configuration.iterPerSample(); iter++) {
                 int iterAffineFactors = random.nextInt(0, affineFactors.length);
                 Point linear = computeLinear(affineFactors[iterAffineFactors], next);
@@ -41,42 +58,14 @@ public class SingleThreadRenderer implements Renderer {
                             int x1 = xResolution - (int) (((POINT_MAX.x() - rotated.x()) / (RANGE_X)) * xResolution);
                             int y1 = yResolution - (int) (((POINT_MAX.y() - rotated.y()) / (RANGE_Y)) * yResolution);
                             if (x1 < xResolution && y1 < yResolution) {
-                                pixels[y1][x1] = getNewColor(pixels[y1][x1],affineFactors[iterAffineFactors]);
+                                Pixel updatedPixel = getNewColor(pixels.get(y1,x1), affineFactors[iterAffineFactors]);
+                                pixels.set(y1, x1, updatedPixel);
                             }
                         }
                     }
                 }
             }
         }
-        return new FractalImage(pixels, xResolution, yResolution);
-    }
-
-    private AffineFactorContainer[] createFactors(int count) {
-        AffineFactorContainer[] factors = new AffineFactorContainer[count];
-        for (int i = 0; i < factors.length; i++) {
-            factors[i] = new AffineFactorContainer(
-                randomFactor(),
-                randomFactor(),
-                randomFactor(),
-                randomFactor(),
-                randomFactor(),
-                randomFactor(),
-                randomColor(),
-                randomColor(),
-                randomColor()
-            );
-        }
-        return factors;
-    }
-
-    private Pixel[][] createInitialPixels(int width, int height) {
-        Pixel[][] pixels = new Pixel[height][width];
-        for (int row = 0; row < height; row++) {
-            for (int col = 0; col < width; col++) {
-                pixels[row][col] = new Pixel(0, 0, 0, 0, 0);
-            }
-        }
-        return pixels;
     }
 
     private Pixel getNewColor(Pixel pixel, AffineFactorContainer factors) {
@@ -94,29 +83,21 @@ public class SingleThreadRenderer implements Renderer {
         }
         return new Pixel(r, g, b, pixel.hitCount() + 1, 0);
     }
-
-    private Point computeLinear(AffineFactorContainer factors, Point next) {
-        double x = factors.a() * next.x() + factors.b() * next.y() + factors.e();
-        double y = factors.c() * next.x() + factors.d() * next.y() + factors.f();
-        return new Point(x, y);
-    }
     private Point randomPoint(){
         double newX = random.nextDouble(POINT_MIN.x(), POINT_MAX.x());
         double newY = random.nextDouble(POINT_MIN.y(), POINT_MAX.y());
         return new Point(newX,newY);
     }
 
+    private Point computeLinear(AffineFactorContainer factors, Point next) {
+        double x = factors.a() * next.x() + factors.b() * next.y() + factors.e();
+        double y = factors.c() * next.x() + factors.d() * next.y() + factors.f();
+        return new Point(x, y);
+    }
+
     private Point rotate(Point nonLinear, double theta) {
         double xRotated = nonLinear.x() * Math.cos(theta) - nonLinear.y() * Math.sin(theta);
         double yRotated = nonLinear.x() * Math.sin(theta) + nonLinear.y() * Math.cos(theta);
         return new Point(xRotated, yRotated);
-    }
-
-    private double randomFactor() {
-        return random.nextDouble(-1, 1);
-    }
-
-    private int randomColor() {
-        return random.nextInt(64, 256) + 64;
     }
 }
