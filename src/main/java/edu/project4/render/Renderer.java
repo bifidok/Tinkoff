@@ -6,5 +6,5 @@ import java.util.List;
 
 @FunctionalInterface
 public interface Renderer {
-    public FractalImage render(FractalFlameConfiguration configuration, List<Transformation> variations);
+    FractalImage render(FractalFlameConfiguration configuration, List<Transformation> variations);
 }

@@ -1,8 +1,6 @@
 package edu.project4.render;
 
 import edu.project4.Pixel;
-import java.util.concurrent.locks.ReadWriteLock;
-import java.util.concurrent.locks.ReentrantReadWriteLock;
 
 /**
  * Two-dimensional array of objects
@@ -10,7 +8,6 @@ import java.util.concurrent.locks.ReentrantReadWriteLock;
  * <strong>Warning:</strong> The number of columns must be the same
  */
 public class ConcurrentPixelTwoDimensionalArray {
-    private final ReadWriteLock lock = new ReentrantReadWriteLock();
     private final Pixel[][] array;
 
     public ConcurrentPixelTwoDimensionalArray(int rows, int columns) {

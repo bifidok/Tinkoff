@@ -5,7 +5,7 @@ import edu.project4.Pixel;
 import static java.lang.Math.log10;
 import static java.lang.Math.pow;
 
-public class GammaCorrection implements ImageProcessor{
+public class GammaCorrection implements ImageProcessor {
     private final double gamma;
     private double maxNormal;
 
@@ -19,7 +19,8 @@ public class GammaCorrection implements ImageProcessor{
         setNormals(image);
         changeBrightness(image);
     }
-    private void setNormals(FractalImage image){
+
+    private void setNormals(FractalImage image) {
         var pixels = image.pixels();
         for (int row = 0; row < image.height(); row++) {
             for (int col = 0; col < image.width(); col++) {
@@ -34,12 +35,13 @@ public class GammaCorrection implements ImageProcessor{
             }
         }
     }
-    private void changeBrightness(FractalImage image){
+
+    private void changeBrightness(FractalImage image) {
         var pixels = image.pixels();
         for (int row = 0; row < image.height(); row++) {
             for (int col = 0; col < image.width(); col++) {
                 Pixel pixel = pixels[row][col];
-                if(pixel.hitCount() != 0){
+                if (pixel.hitCount() != 0) {
                     double normal = pixel.normal() / maxNormal;
                     int r = (int) (pixel.r() * pow(normal, (1.0 / gamma)));
                     int g = (int) (pixel.g() * pow(normal, (1.0 / gamma)));

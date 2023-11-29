@@ -9,11 +9,14 @@ import java.util.List;
 import java.util.Random;
 
 public class SingleThreadRenderer implements Renderer {
-    private static final Random random = new Random();
-    private static final Point POINT_MIN = new Point(-1.777, -1.0);
-    private static final Point POINT_MAX = new Point(1.777, 1.0);
-    private static final double RANGE_X = POINT_MAX.x() - POINT_MIN.x();
-    private static final double RANGE_Y = POINT_MAX.y() - POINT_MIN.y();
+    private final static Point POINT_MIN = new Point(-1.777, -1.0);
+    private final static Point POINT_MAX = new Point(1.777, 1.0);
+    private final static double RANGE_X = POINT_MAX.x() - POINT_MIN.x();
+    private final static double RANGE_Y = POINT_MAX.y() - POINT_MIN.y();
+    private final static int SKIP_ITERATIONS = 20;
+    private final static int AFFINE_FACTORS = 5;
+
+    private final Random random = new Random();
 
     @Override
     public FractalImage render(FractalFlameConfiguration configuration, List<Transformation> variations) {
@@ -21,11 +24,11 @@ public class SingleThreadRenderer implements Renderer {
         int xResolution = configuration.width();
         int yResolution = configuration.height();
         var pixels = createInitialPixels(xResolution, yResolution);
-        var affineFactors = createFactors(5);
+        var affineFactors = createFactors(AFFINE_FACTORS);
 
         for (int num = 0; num < configuration.samples(); num++) {
             Point next = randomPoint();
-            for (int iter = -20; iter < configuration.iterPerSample(); iter++) {
+            for (int iter = -SKIP_ITERATIONS; iter < configuration.iterPerSample(); iter++) {
                 int iterAffineFactors = random.nextInt(0, affineFactors.length);
                 Point linear = computeLinear(affineFactors[iterAffineFactors], next);
                 Point nonLinear = transformation.apply(linear);
@@ -41,7 +44,7 @@ public class SingleThreadRenderer implements Renderer {
                             int x1 = xResolution - (int) (((POINT_MAX.x() - rotated.x()) / (RANGE_X)) * xResolution);
                             int y1 = yResolution - (int) (((POINT_MAX.y() - rotated.y()) / (RANGE_Y)) * yResolution);
                             if (x1 < xResolution && y1 < yResolution) {
-                                pixels[y1][x1] = getNewColor(pixels[y1][x1],affineFactors[iterAffineFactors]);
+                                pixels[y1][x1] = getNewColor(pixels[y1][x1], affineFactors[iterAffineFactors]);
                             }
                         }
                     }
@@ -100,10 +103,11 @@ public class SingleThreadRenderer implements Renderer {
         double y = factors.c() * next.x() + factors.d() * next.y() + factors.f();
         return new Point(x, y);
     }
-    private Point randomPoint(){
+
+    private Point randomPoint() {
         double newX = random.nextDouble(POINT_MIN.x(), POINT_MAX.x());
         double newY = random.nextDouble(POINT_MIN.y(), POINT_MAX.y());
-        return new Point(newX,newY);
+        return new Point(newX, newY);
     }
 
     private Point rotate(Point nonLinear, double theta) {
@@ -116,6 +120,7 @@ public class SingleThreadRenderer implements Renderer {
         return random.nextDouble(-1, 1);
     }
 
+    @SuppressWarnings("MagicNumber")
     private int randomColor() {
         return random.nextInt(64, 256) + 64;
     }

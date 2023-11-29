@@ -4,18 +4,19 @@ import edu.project4.AffineFactorContainer;
 import edu.project4.FractalImage;
 import edu.project4.Pixel;
 import edu.project4.transformation.Transformation;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
-import java.util.concurrent.Future;
+import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicInteger;
 
 public class MultiThreadRenderer implements Renderer {
-    private static final Random random = new Random();
+    private final static Random RANDOM = new Random();
+    private final static int AFFINE_FACTORS = 5;
+    private final static int MAX_WAITING_MINUTES_FOR_RENDERER = 3;
 
-    private final int threadCount;
+    private int threadCount;
 
     public MultiThreadRenderer(int threadCount) {
         this.threadCount = threadCount;
@@ -24,18 +25,20 @@ public class MultiThreadRenderer implements Renderer {
     @Override
     public FractalImage render(FractalFlameConfiguration configuration, List<Transformation> variations) {
         ExecutorService executorService = Executors.newFixedThreadPool(threadCount);
-        Transformation transformation = variations.get(random.nextInt(0, variations.size()));
+        Transformation transformation = variations.get(RANDOM.nextInt(0, variations.size()));
         int xResolution = configuration.width();
         int yResolution = configuration.height();
         var pixels = createInitialPixels(xResolution, yResolution);
-        var affineFactors = createFactors(5);
+        var affineFactors = createFactors(AFFINE_FACTORS);
         AtomicInteger sample = new AtomicInteger(0);
         for (int i = 0; i < threadCount; i++) {
             executorService.execute(new RenderThread(configuration, affineFactors, transformation, pixels, sample));
         }
         executorService.shutdown();
-        while (!executorService.isTerminated()) {
-
+        try {
+            executorService.awaitTermination(MAX_WAITING_MINUTES_FOR_RENDERER, TimeUnit.MINUTES);
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
         }
         return new FractalImage(pixels.toArray(), xResolution, yResolution);
     }
@@ -69,10 +72,11 @@ public class MultiThreadRenderer implements Renderer {
     }
 
     private double randomFactor() {
-        return random.nextDouble(-1, 1);
+        return RANDOM.nextDouble(-1, 1);
     }
 
+    @SuppressWarnings("MagicNumber")
     private int randomColor() {
-        return random.nextInt(64, 256) + 64;
+        return RANDOM.nextInt(64, 256) + 64;
     }
 }

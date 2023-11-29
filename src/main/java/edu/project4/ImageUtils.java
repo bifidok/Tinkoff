@@ -20,13 +20,11 @@ public final class ImageUtils {
 
     public static void save(FractalImage image, Path filename, ImageFormat format) throws IOException {
         BufferedImage bufferedImage = convertFractalToBuffered(image);
-        String fileFormat;
-        switch (format) {
-            case ImageFormat.BMP -> fileFormat = "bmp";
-            case ImageFormat.JPEG -> fileFormat = "jpeg";
-            default -> fileFormat = "png";
-        }
-        filename = Path.of(String.format("%s.%s",filename.toString(), fileFormat));
+        String fileFormat = switch (format) {
+            case ImageFormat.BMP -> "bmp";
+            case ImageFormat.JPEG -> "jpeg";
+            default -> "png";
+        };
         ImageIO.write(bufferedImage, fileFormat, filename.toFile());
     }
 
