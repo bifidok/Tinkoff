@@ -1,5 +1,6 @@
 package edu.project2.solver;
 
+import edu.project2.Cell;
 import edu.project2.Maze;
 import edu.project2.generator.HuntAndKillGenerator;
 import edu.project2.generator.MazeGenerator;
@@ -7,6 +8,7 @@ import edu.project2.generator.PrimGenerator;
 import edu.project2.generator.RecursiveBacktrackGenerator;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import java.util.List;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
 public class BFSSolverTest {
@@ -17,10 +19,12 @@ public class BFSSolverTest {
         Maze maze = generator.generate(10, 10);
         MazeSolver solver = new BreadthFirstSearchSolver();
 
-        var answer = solver.solve(maze);
+        List<Cell> answer = solver.solve(maze);
+        Cell start = maze.getStart();
+        Cell end = maze.getEnd();
 
-        assertThat(answer.contains(maze.getStart())).isTrue();
-        assertThat(answer.contains(maze.getEnd())).isTrue();
+        assertThat(answer.get(answer.size() - 1)).isEqualTo(end);
+        assertThat(answer.get(0)).isEqualTo(start);
     }
 
     @Test
@@ -30,10 +34,12 @@ public class BFSSolverTest {
         Maze maze = generator.generate(10, 10);
         MazeSolver solver = new BreadthFirstSearchSolver();
 
-        var answer = solver.solve(maze);
+        List<Cell> answer = solver.solve(maze);
+        Cell start = maze.getStart();
+        Cell end = maze.getEnd();
 
-        assertThat(answer.contains(maze.getStart())).isTrue();
-        assertThat(answer.contains(maze.getEnd())).isTrue();
+        assertThat(answer.get(answer.size() - 1)).isEqualTo(end);
+        assertThat(answer.get(0)).isEqualTo(start);
     }
 
     @Test
@@ -43,9 +49,11 @@ public class BFSSolverTest {
         Maze maze = generator.generate(15, 15);
         MazeSolver solver = new BreadthFirstSearchSolver();
 
-        var answer = solver.solve(maze);
+        List<Cell> answer = solver.solve(maze);
+        Cell start = maze.getStart();
+        Cell end = maze.getEnd();
 
-        assertThat(answer.contains(maze.getStart())).isTrue();
-        assertThat(answer.contains(maze.getEnd())).isTrue();
+        assertThat(answer.get(answer.size() - 1)).isEqualTo(end);
+        assertThat(answer.get(0)).isEqualTo(start);
     }
 }

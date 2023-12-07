@@ -6,7 +6,7 @@ import edu.project2.Maze;
 import java.util.Random;
 
 public class HuntAndKillGenerator implements MazeGenerator {
-    private final static int INCORRECT_SIDE_LENGTH = 3;
+    private final static int MIN_SIDE_LENGTH = 3;
 
     private final int[][] waysToGo = new int[][] {
         {-1, 0},
@@ -16,7 +16,7 @@ public class HuntAndKillGenerator implements MazeGenerator {
     };
 
     public Maze generate(int width, int height) {
-        if (width < INCORRECT_SIDE_LENGTH || height < INCORRECT_SIDE_LENGTH) {
+        if (width < MIN_SIDE_LENGTH || height < MIN_SIDE_LENGTH) {
             throw new IllegalArgumentException("Maze cant be such small");
         }
         Cell[][] grid = new Cell[height][width];
@@ -66,7 +66,7 @@ public class HuntAndKillGenerator implements MazeGenerator {
             }
         }
         grid[start.y()][start.x()] = new Cell(start.x(), start.y(), CellType.EMPTY);
-        return start;
+        return grid[start.y()][start.x()];
     }
 
     private Cell generateOut(Cell[][] grid) {
@@ -78,7 +78,7 @@ public class HuntAndKillGenerator implements MazeGenerator {
             }
         }
         grid[end.y()][end.x()] = new Cell(end.x(), end.y(), CellType.EMPTY);
-        return end;
+        return grid[end.y()][end.x()];
     }
 
     private boolean canMakePassage(Cell[][] grid, int x, int y) {

@@ -8,7 +8,7 @@ import java.util.List;
 import java.util.Random;
 
 public class PrimGenerator implements MazeGenerator {
-    private final static int INCORRECT_SIDE_LENGTH = 3;
+    private final static int MIN_SIDE_LENGTH = 3;
 
     private final int[][] waysToGo = new int[][] {
         {-1, 0},
@@ -18,7 +18,7 @@ public class PrimGenerator implements MazeGenerator {
     };
 
     public Maze generate(int width, int height) {
-        if (width < INCORRECT_SIDE_LENGTH || height < INCORRECT_SIDE_LENGTH) {
+        if (width < MIN_SIDE_LENGTH || height < MIN_SIDE_LENGTH) {
             throw new IllegalArgumentException("Maze cant be such small");
         }
         Cell[][] grid = new Cell[height][width];
@@ -87,7 +87,7 @@ public class PrimGenerator implements MazeGenerator {
             }
         }
         grid[start.y()][start.x()] = new Cell(start.x(), start.y(), CellType.EMPTY);
-        return start;
+        return grid[start.y()][start.x()];
     }
 
     private Cell generateOut(Cell[][] grid) {
@@ -97,7 +97,7 @@ public class PrimGenerator implements MazeGenerator {
             grid[end.y()][end.x() - outDrillCounter] = new Cell(end.x() - outDrillCounter, end.y(), CellType.EMPTY);
             outDrillCounter++;
         }
-        return end;
+        return grid[grid.length / 2][grid[0].length - 1];
     }
 
     private boolean isInBounds(Cell[][] grid, int x, int y) {

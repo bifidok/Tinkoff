@@ -6,8 +6,8 @@ import edu.project2.Maze;
 
 public class RecursiveBacktrackGenerator implements MazeGenerator {
     private final static int STRAIGHT_PASSAGE_LIMIT = 4;
-    private final static int INCORRECT_SIDE_LENGTH_LOWER = 3;
-    private final static int INCORRECT_SIDE_LENGTH_UPPER = 100;
+    private final static int MIN_SIDE_LENGTH = 3;
+    private final static int MAX_SIDE_LENGTH = 100;
 
     private final int[][] waysToGo = new int[][] {
         {-1, 0},
@@ -19,9 +19,9 @@ public class RecursiveBacktrackGenerator implements MazeGenerator {
     private int pathGeneratingCounter;
 
     public Maze generate(int width, int height) {
-        if (width < INCORRECT_SIDE_LENGTH_LOWER || height < INCORRECT_SIDE_LENGTH_LOWER) {
+        if (width < MIN_SIDE_LENGTH || height < MIN_SIDE_LENGTH) {
             throw new IllegalArgumentException("Maze cant be such small");
-        } else if (width > INCORRECT_SIDE_LENGTH_UPPER || height > INCORRECT_SIDE_LENGTH_UPPER) {
+        } else if (width > MAX_SIDE_LENGTH || height > MAX_SIDE_LENGTH) {
             throw new IllegalArgumentException("No memory for recursion");
         }
         Cell[][] grid = new Cell[height][width];
@@ -64,7 +64,7 @@ public class RecursiveBacktrackGenerator implements MazeGenerator {
             }
         }
         grid[start.y()][start.x()] = new Cell(start.x(), start.y(), CellType.EMPTY);
-        return start;
+        return grid[start.y()][start.x()];
     }
 
     private Cell generateOut(Cell[][] grid) {
@@ -76,7 +76,7 @@ public class RecursiveBacktrackGenerator implements MazeGenerator {
             }
         }
         grid[end.y()][end.x()] = new Cell(end.x(), end.y(), CellType.EMPTY);
-        return end;
+        return grid[end.y()][end.x()];
     }
 
     private boolean canMakePassage(Cell[][] grid, int x, int y) {

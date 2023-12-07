@@ -3,12 +3,13 @@ package edu.project2.solver;
 import edu.project2.Cell;
 import edu.project2.CellType;
 import edu.project2.Maze;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.LinkedList;
+import java.util.List;
 import java.util.Map;
 import java.util.Queue;
-import java.util.Set;
 
 public class BreadthFirstSearchSolver implements MazeSolver {
     private final int[][] waysToGo = new int[][] {
@@ -18,11 +19,11 @@ public class BreadthFirstSearchSolver implements MazeSolver {
         {0, -1},
     };
 
-    public Set<Cell> solve(Maze maze) {
+    public List<Cell> solve(Maze maze) {
         return findEnd(maze.getGrid(), maze.getStart(), maze.getEnd());
     }
 
-    private Set<Cell> findEnd(Cell[][] grid, Cell start, Cell end) {
+    private List<Cell> findEnd(Cell[][] grid, Cell start, Cell end) {
         Map<Cell, Cell> cellToPrev = new HashMap<>();
         Queue<Cell> queue = new LinkedList<>();
         queue.add(start);
@@ -41,27 +42,28 @@ public class BreadthFirstSearchSolver implements MazeSolver {
                         queue.add(neighbour);
                         cellToPrev.put(neighbour, cell);
                     }
-
                 }
             }
         }
         return null;
     }
 
-    private Set<Cell> createAnswerPath(Map<Cell, Cell> cellToPrev, Cell end) {
-        Set<Cell> answerPath = new HashSet<>();
+    private List<Cell> createAnswerPath(Map<Cell, Cell> cellToPrev, Cell end) {
+        List<Cell> answerPath = new ArrayList<>(cellToPrev.size());
         Cell curCell = end;
-        while (cellToPrev.containsKey(curCell)) {
+        while (curCell != null) {
             answerPath.add(curCell);
             Cell prevCell = cellToPrev.get(curCell);
             cellToPrev.remove(curCell);
             curCell = prevCell;
+
         }
+        Collections.reverse(answerPath);
         return answerPath;
     }
 
     private boolean isInBounds(Cell[][] grid, Cell cell) {
-        return cell.x() >= 0 && cell.y() >= 0
+        return cell.x() > 0 && cell.y() > 0
             && cell.x() < grid[0].length && cell.y() < grid.length;
     }
 

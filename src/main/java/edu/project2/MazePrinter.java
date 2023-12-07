@@ -7,10 +7,10 @@ import org.apache.logging.log4j.Logger;
 public class MazePrinter {
     private final static Logger LOGGER = LogManager.getLogger();
 
-    private final MazeRenderer renderer;
+    private final Renderer renderer;
 
-    public MazePrinter() {
-        renderer = new MazeRenderer();
+    public MazePrinter(Renderer renderer) {
+        this.renderer = renderer;
     }
 
     public void print(Maze maze, Set<Cell> path) {

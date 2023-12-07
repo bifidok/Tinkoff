@@ -2,8 +2,8 @@ package edu.project2.solver;
 
 import edu.project2.Cell;
 import edu.project2.Maze;
-import java.util.Set;
+import java.util.List;
 
 public interface MazeSolver {
-    Set<Cell> solve(Maze maze);
+    List<Cell> solve(Maze maze);
 }
