@@ -1,0 +1,8 @@
+package edu.hw10.task2;
+
+public interface FibCalculator {
+    @Cache(persist = true)
+    long fib(int number);
+    @Cache(persist = false)
+    long fibFalse(int number);
+}
