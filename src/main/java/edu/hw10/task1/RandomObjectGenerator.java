@@ -90,12 +90,12 @@ public class RandomObjectGenerator {
             return min;
         }
         return switch (type) {
-            case Type.LONG -> Long.MIN_VALUE;
-            case Type.INT -> Integer.MIN_VALUE;
-            case Type.SHORT -> Short.MIN_VALUE;
-            case Type.BYTE -> Byte.MIN_VALUE;
-            case Type.DOUBLE -> Double.MIN_VALUE;
-            case Type.FLOAT -> Float.MIN_VALUE;
+            case LONG -> Long.MIN_VALUE;
+            case INT -> Integer.MIN_VALUE;
+            case SHORT -> Short.MIN_VALUE;
+            case BYTE -> Byte.MIN_VALUE;
+            case DOUBLE -> Double.MIN_VALUE;
+            case FLOAT -> Float.MIN_VALUE;
             default -> 0;
         };
     }
@@ -105,12 +105,12 @@ public class RandomObjectGenerator {
             return max;
         }
         return switch (type) {
-            case Type.LONG -> Long.MAX_VALUE;
-            case Type.INT -> Integer.MAX_VALUE;
-            case Type.SHORT -> Short.MAX_VALUE;
-            case Type.BYTE -> Byte.MAX_VALUE;
-            case Type.DOUBLE -> Double.MAX_VALUE;
-            case Type.FLOAT -> Float.MAX_VALUE;
+            case LONG -> Long.MAX_VALUE;
+            case INT -> Integer.MAX_VALUE;
+            case SHORT -> Short.MAX_VALUE;
+            case BYTE -> Byte.MAX_VALUE;
+            case DOUBLE -> Double.MAX_VALUE;
+            case FLOAT -> Float.MAX_VALUE;
             default -> 0;
         };
     }
